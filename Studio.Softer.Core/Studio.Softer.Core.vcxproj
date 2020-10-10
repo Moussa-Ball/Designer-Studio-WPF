@@ -16,6 +16,7 @@
     <ProjectGuid>{7c035bc4-3c8f-4ba7-86f7-cd70d0fd4819}</ProjectGuid>
     <RootNamespace>StudioSofterCore</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Studio.Softer.Core</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

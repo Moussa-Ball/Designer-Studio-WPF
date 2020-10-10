@@ -1,0 +1,2 @@
+C:\Users\moise\source\repos\Coder Studio\Dependencies\libconfig-1.7.2\Debug\libconfig.pdb
+C:\Users\moise\source\repos\Coder Studio\Dependencies\libconfig-1.7.2\lib\libconfig.Debug\libconfig.pdb

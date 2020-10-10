@@ -21,7 +21,6 @@ namespace Studio.Softer
         public Application()
         {
             Logger.Open(FullName, logFilePath);
-            Logger.Warning($"{FullName} is already running. Shutting down.");
         }
 
         /// <summary>
