@@ -23,3 +23,8 @@ String^ Studio::Softer::Interoperate::Application::GetOrCreateFilePath(Environme
         File::Create(filepath);
     return filepath;
 }
+
+void Studio::Softer::Interoperate::Application::OnStartup(System::Windows::StartupEventArgs^ e)
+{
+    
+}

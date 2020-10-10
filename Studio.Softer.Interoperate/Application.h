@@ -60,6 +60,9 @@ namespace Studio
 
 				/* Allows to get a file path */
 				String^ GetOrCreateFilePath(Environment::SpecialFolder sysfolder, String^ folderPath, String^ filename);
+
+			protected:
+				virtual void OnStartup(System::Windows::StartupEventArgs^ e) override;
 			};
 		}
 	}

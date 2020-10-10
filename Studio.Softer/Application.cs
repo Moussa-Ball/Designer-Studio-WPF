@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Windows;
+using System.Threading;
 using Studio.Softer.Interoperate;
 
 namespace Studio.Softer
@@ -33,12 +34,29 @@ namespace Studio.Softer
             if (newInstance)
             {
                 m_mutex.ReleaseMutex();
+                MainWindow = new UI.SofterWindow
+                {
+                    Height = 768,
+                    Width = 1024
+                };
+                MainWindow.Show();
+                Run(MainWindow);
             }
             else
             {
                 Logger.Warning($"{FullName} is already running. Shutting down.");
                 Shutdown();
             }
+        }
+
+        /// <summary>
+        /// Is called when the application starts.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            DictionnariesManager.AddResource("Styles/SofterWindow.xaml");
+            base.OnStartup(e);
         }
     }
 }
