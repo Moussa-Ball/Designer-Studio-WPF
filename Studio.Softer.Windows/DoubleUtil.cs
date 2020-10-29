@@ -1,5 +1,4 @@
-﻿
-namespace Studio.Softer.Windows
+﻿namespace Studio.Softer.Windows
 {
     using System.Diagnostics.CodeAnalysis;
 
@@ -38,6 +37,12 @@ namespace Studio.Softer.Windows
             return (delta < Epsilon) && (delta > -Epsilon);
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool IsCloseTo(this double value1, double value2)
+        {
+            return AreClose(value1, value2);
+        }
+
         /// <summary>
         /// LessThan returns whether or not the first double is less than the second double.
         /// That is, whether or not the first is strictly less than *and* not within epsilon of
@@ -50,7 +55,7 @@ namespace Studio.Softer.Windows
         /// <param name="value2">The second double to compare.</param>
         /// <returns>The result of the LessThan comparision.</returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool LessThan(double value1, double value2)
+        public static bool IsStrictlyLessThan(this double value1, double value2)
         {
             return (value1 < value2) && !AreClose(value1, value2);
         }
@@ -67,7 +72,7 @@ namespace Studio.Softer.Windows
         /// <param name="value2">The second double to compare.</param>
         /// <returns>The result of the GreaterThan comparision.</returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool GreaterThan(double value1, double value2)
+        public static bool IsStrictlyGreaterThan(this double value1, double value2)
         {
             return (value1 > value2) && !AreClose(value1, value2);
         }
@@ -84,7 +89,7 @@ namespace Studio.Softer.Windows
         /// <param name="value2">The second double to compare.</param>
         /// <returns>The result of the LessThanOrClose comparision.</returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool LessThanOrClose(double value1, double value2)
+        public static bool IsLessThanOrCloseTo(this double value1, double value2)
         {
             return (value1 < value2) || AreClose(value1, value2);
         }
@@ -101,7 +106,7 @@ namespace Studio.Softer.Windows
         /// <param name="value2">The second double to compare.</param>
         /// <returns>The result of the GreaterThanOrClose comparision.</returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool GreaterThanOrClose(double value1, double value2)
+        public static bool IsGreaterThanOrCloseTo(this double value1, double value2)
         {
             return (value1 > value2) || AreClose(value1, value2);
         }
@@ -112,7 +117,7 @@ namespace Studio.Softer.Windows
         /// <param name='value'>The value to test.</param>
         /// <returns>Whether or not the value is a finite number.</returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool IsFinite(double value)
+        public static bool IsFinite(this double value)
         {
             return !double.IsNaN(value) && !double.IsInfinity(value);
         }
@@ -123,9 +128,21 @@ namespace Studio.Softer.Windows
         /// <param name='value'>The value to test.</param>
         /// <returns>Whether or not the value is a valid size value.</returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool IsValidSize(double value)
+        public static bool IsValidSize(this double value)
         {
-            return IsFinite(value) && GreaterThanOrClose(value, 0);
+            return IsFinite(value) && value.IsGreaterThanOrCloseTo(0);
         }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool IsFiniteAndNonNegative(this double d)
+        {
+            if (double.IsNaN(d) || double.IsInfinity(d) || d < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

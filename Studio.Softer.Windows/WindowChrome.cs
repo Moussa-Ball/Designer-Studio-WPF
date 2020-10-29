@@ -10,6 +10,29 @@ namespace Studio.Softer.Windows
     using System.Windows;
     using System.Windows.Data;
 
+    public enum ResizeGripDirection
+    {
+        None,
+        TopLeft,
+        Top,
+        TopRight,
+        Right,
+        BottomRight,
+        Bottom,
+        BottomLeft,
+        Left,
+    }
+
+    [Flags]
+    public enum NonClientFrameEdges
+    {
+        None = 0,
+        Left = 1,
+        Top = 2,
+        Right = 4,
+        Bottom = 8,
+    }
+
     public class WindowChrome : Freezable
     {
         private struct _SystemParameterBoundProperty
@@ -58,34 +81,6 @@ namespace Studio.Softer.Windows
 
             chromeWorker.SetWindowChrome(newChrome);
         }
-
-        private static readonly NonClientFrameEdges NonClientFrameEdges_All = NonClientFrameEdges.Bottom | NonClientFrameEdges.Right | NonClientFrameEdges.Top | NonClientFrameEdges.Left;
-
-        private static bool _NonClientFrameEdgesAreValid(object value)
-        {
-            var ncEdges = NonClientFrameEdges.None;
-            try
-            {
-                ncEdges = (NonClientFrameEdges)value;
-            }
-            catch (InvalidCastException)
-            {
-                return false;
-            }
-            if (ncEdges != NonClientFrameEdges.None)
-            {
-                if ((ncEdges | NonClientFrameEdges_All) != NonClientFrameEdges_All)
-                {
-                    return false;
-                }
-                if (ncEdges == NonClientFrameEdges_All)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
@@ -136,11 +131,13 @@ namespace Studio.Softer.Windows
         }
 
         public static readonly DependencyProperty ResizeGripDirectionProperty = DependencyProperty.RegisterAttached(
-            "ResizeGripDirection", 
-            typeof(ResizeGripDirection), 
-            typeof(WindowChrome), 
+            "ResizeGripDirection",
+            typeof(ResizeGripDirection),
+            typeof(WindowChrome),
             new FrameworkPropertyMetadata(ResizeGripDirection.None, FrameworkPropertyMetadataOptions.Inherits));
 
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static ResizeGripDirection GetResizeGripDirection(IInputElement inputElement)
         {
             Verify.IsNotNull(inputElement, "inputElement");
@@ -152,6 +149,8 @@ namespace Studio.Softer.Windows
             return (ResizeGripDirection)dobj.GetValue(ResizeGripDirectionProperty);
         }
 
+        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        [SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static void SetResizeGripDirection(IInputElement inputElement, ResizeGripDirection direction)
         {
             Verify.IsNotNull(inputElement, "inputElement");
@@ -216,10 +215,23 @@ namespace Studio.Softer.Windows
 
             return thickness;
         }
+
         public Thickness GlassFrameThickness
         {
             get { return (Thickness)GetValue(GlassFrameThicknessProperty); }
             set { SetValue(GlassFrameThicknessProperty, value); }
+        }
+
+        public static readonly DependencyProperty UseAeroCaptionButtonsProperty = DependencyProperty.Register(
+            "UseAeroCaptionButtons",
+            typeof(bool),
+            typeof(WindowChrome),
+            new FrameworkPropertyMetadata(true));
+
+        public bool UseAeroCaptionButtons
+        {
+            get { return (bool)GetValue(UseAeroCaptionButtonsProperty); }
+            set { SetValue(UseAeroCaptionButtonsProperty, value); }
         }
 
         public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register(
@@ -238,45 +250,53 @@ namespace Studio.Softer.Windows
         }
 
         public static readonly DependencyProperty NonClientFrameEdgesProperty = DependencyProperty.Register(
-            "NonClientFrameEdges", 
-            typeof(NonClientFrameEdges), 
-            typeof(WindowChrome), 
+            "NonClientFrameEdges",
+            typeof(NonClientFrameEdges),
+            typeof(WindowChrome),
             new PropertyMetadata(
                 NonClientFrameEdges.None,
-                (d, e) => ((WindowChrome) d)._OnPropertyChangedThatRequiresRepaint()), 
-                _NonClientFrameEdgesAreValid);
+                (d, e) => ((WindowChrome)d)._OnPropertyChangedThatRequiresRepaint()),
+            _NonClientFrameEdgesAreValid);
 
+        private static readonly NonClientFrameEdges NonClientFrameEdges_All = NonClientFrameEdges.Left | NonClientFrameEdges.Top | NonClientFrameEdges.Right | NonClientFrameEdges.Bottom;
+
+        private static bool _NonClientFrameEdgesAreValid(object value)
+        {
+            NonClientFrameEdges ncEdges = NonClientFrameEdges.None;
+            try
+            {
+                ncEdges = (NonClientFrameEdges)value;
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+
+            if (ncEdges == NonClientFrameEdges.None)
+            {
+                return true;
+            }
+
+            // Does this only contain valid bits?
+            if ((ncEdges | NonClientFrameEdges_All) != NonClientFrameEdges_All)
+            {
+                return false;
+            }
+
+            // It can't sacrifice all 4 edges.  Weird things happen.
+            if (ncEdges == NonClientFrameEdges_All)
+            {
+                return false;
+            }
+
+            return true; 
+        }
 
         public NonClientFrameEdges NonClientFrameEdges
         {
-            get
-            {
-                return (NonClientFrameEdges)GetValue(NonClientFrameEdgesProperty);
-            }
-            set
-            {
-                SetValue(NonClientFrameEdgesProperty, value);
-            }
+            get { return (NonClientFrameEdges)GetValue(NonClientFrameEdgesProperty); }
+            set { SetValue(NonClientFrameEdgesProperty, value); }
         }
-
-        public static readonly DependencyProperty UseAeroCaptionButtonsProperty = DependencyProperty.Register(
-            "UseAeroCaptionButtons",
-            typeof(bool),
-            typeof(WindowChrome), 
-            new FrameworkPropertyMetadata(true));
-
-        public bool UseAeroCaptionButtons
-        {
-            get
-            {
-                return (bool)GetValue(UseAeroCaptionButtonsProperty);
-            }
-            set
-            {
-                SetValue(UseAeroCaptionButtonsProperty, value);
-            }
-        }
-
 
         #endregion
 
@@ -309,8 +329,12 @@ namespace Studio.Softer.Windows
                     bp.DependencyProperty,
                     new Binding
                     {
+#if RIBBON_IN_FRAMEWORK
+                        Path = new PropertyPath("(SystemParameters." + bp.SystemParameterPropertyName + ")"),
+#else
                         Source = SystemParameters2.Current,
                         Path = new PropertyPath(bp.SystemParameterPropertyName),
+#endif
                         Mode = BindingMode.OneWay,
                         UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                     });

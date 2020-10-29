@@ -1,19 +1,23 @@
-﻿/**************************************************************************\
+﻿#pragma warning disable 1591, 618
+/**************************************************************************\
     Copyright Microsoft Corporation. All Rights Reserved.
 \**************************************************************************/
 
 namespace Studio.Softer.Windows
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Diagnostics.CodeAnalysis;
     using System.Runtime.InteropServices;
+    using System.Security;
     using System.Windows;
     using System.Windows.Media;
+    
 
     [SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-    public class SystemParameters2 : INotifyPropertyChanged
+    internal class SystemParameters2 : INotifyPropertyChanged
     {
         private delegate void _SystemMetricUpdate(IntPtr wParam, IntPtr lParam);
 
@@ -83,7 +87,7 @@ namespace Studio.Softer.Windows
         private void _InitializeCaptionHeight()
         {
             Point ptCaption = new Point(0, NativeMethods.GetSystemMetrics(SM.CYCAPTION));
-            WindowCaptionHeight = DpiHelper.DevicePixelsToLogical(ptCaption).Y;
+            WindowCaptionHeight = DpiHelper.DevicePixelsToLogical(ptCaption, SystemParameters2.DpiX / 96.0, SystemParameters2.Dpi / 96.0).Y;
         }
 
         private void _UpdateCaptionHeight(IntPtr wParam, IntPtr lParam)
@@ -96,7 +100,7 @@ namespace Studio.Softer.Windows
             Size frameSize = new Size(
                 NativeMethods.GetSystemMetrics(SM.CXSIZEFRAME),
                 NativeMethods.GetSystemMetrics(SM.CYSIZEFRAME));
-            Size frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize);
+            Size frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize, SystemParameters2.DpiX / 96.0, SystemParameters2.Dpi / 96.0);
             WindowResizeBorderThickness = new Thickness(frameSizeInDips.Width, frameSizeInDips.Height, frameSizeInDips.Width, frameSizeInDips.Height);
         }
 
@@ -110,9 +114,9 @@ namespace Studio.Softer.Windows
             Size frameSize = new Size(
                 NativeMethods.GetSystemMetrics(SM.CXSIZEFRAME),
                 NativeMethods.GetSystemMetrics(SM.CYSIZEFRAME));
-            Size frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize);
+            Size frameSizeInDips = DpiHelper.DeviceSizeToLogical(frameSize, SystemParameters2.DpiX / 96.0, SystemParameters2.Dpi / 96.0);
             int captionHeight = NativeMethods.GetSystemMetrics(SM.CYCAPTION);
-            double captionHeightInDips = DpiHelper.DevicePixelsToLogical(new Point(0, captionHeight)).Y;
+            double captionHeightInDips = DpiHelper.DevicePixelsToLogical(new Point(0, captionHeight), SystemParameters2.DpiX / 96.0, SystemParameters2.Dpi / 96.0).Y;
             WindowNonClientFrameThickness = new Thickness(frameSizeInDips.Width, frameSizeInDips.Height + captionHeightInDips, frameSizeInDips.Width, frameSizeInDips.Height);
         }
 
@@ -143,11 +147,10 @@ namespace Studio.Softer.Windows
             int frameX = NativeMethods.GetSystemMetrics(SM.CXSIZEFRAME) + NativeMethods.GetSystemMetrics(SM.CXEDGE);
             int frameY = NativeMethods.GetSystemMetrics(SM.CYSIZEFRAME) + NativeMethods.GetSystemMetrics(SM.CYEDGE);
 
-            Rect deviceCaptionLocation = new Rect(0.0, 0.0, (captionX * 3), captionY);
-            deviceCaptionLocation.Offset(-frameX - deviceCaptionLocation.Width, frameY);
-            Rect logicalCaptionLocation = DpiHelper.DeviceRectToLogical(deviceCaptionLocation);
+            Rect captionRect = new Rect(0, 0, captionX * 3, captionY);
+            captionRect.Offset(-frameX - captionRect.Width, frameY);
 
-            WindowCaptionButtonsLocation = logicalCaptionLocation;
+            WindowCaptionButtonsLocation = captionRect;
         }
 
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
@@ -167,7 +170,8 @@ namespace Studio.Softer.Windows
                 Marshal.StructureToPtr(tbix, lParam, false);
                 // This might flash a window in the taskbar while being calculated.
                 // WM_GETTITLEBARINFOEX doesn't work correctly unless the window is visible while processing.
-                NativeMethods.ShowWindow(_messageHwnd.Handle, SW.SHOW);
+                // use SW.SHOWNA instead SW.SHOW to avoid some brief flashing when launched the window
+                NativeMethods.ShowWindow(_messageHwnd.Handle, SW.SHOWNA);
                 NativeMethods.SendMessage(_messageHwnd.Handle, WM.GETTITLEBARINFOEX, IntPtr.Zero, lParam);
                 tbix = (TITLEBARINFOEX)Marshal.PtrToStructure(lParam, typeof(TITLEBARINFOEX));
             }
@@ -192,7 +196,7 @@ namespace Studio.Softer.Windows
                 rcAllCaptionButtons.Width,
                 rcAllCaptionButtons.Height);
 
-            Rect logicalCaptionLocation = DpiHelper.DeviceRectToLogical(deviceCaptionLocation);
+            Rect logicalCaptionLocation = DpiHelper.DeviceRectToLogical(deviceCaptionLocation, SystemParameters2.DpiX / 96.0, SystemParameters2.Dpi / 96.0);
 
             WindowCaptionButtonsLocation = logicalCaptionLocation;
         }
@@ -222,14 +226,26 @@ namespace Studio.Softer.Windows
                 return;
             }
 
-            string name;
-            string color;
-            string size;
-            NativeMethods.GetCurrentThemeName(out name, out color, out size);
+            try
+            {
+                // wrap GetCurrentThemeName in a try/catch as we were seeing an exception
+                // even though the theme service seemed to be active (UxTheme IsThemeActive)
+                // see http://stackoverflow.com/questions/8893854/wpf-application-ribbon-crash as an example.
 
-            // Consider whether this is the most useful way to expose this...
-            UxThemeName = System.IO.Path.GetFileNameWithoutExtension(name);
-            UxThemeColor = color;
+                string name;
+                string color;
+                string size;
+                NativeMethods.GetCurrentThemeName(out name, out color, out size);
+
+                // Consider whether this is the most useful way to expose this...
+                UxThemeName = System.IO.Path.GetFileNameWithoutExtension(name);
+                UxThemeColor = color;
+            }
+            catch (Exception)
+            {
+                UxThemeName = "Classic";
+                UxThemeColor = "";
+            }
         }
 
         private void _UpdateThemeInfo(IntPtr wParam, IntPtr lParam)
@@ -537,6 +553,93 @@ namespace Studio.Softer.Windows
                 }
             }
         }
+
+        #region Per monitor dpi support
+
+        private enum CacheSlot : int
+        {
+            DpiX,
+
+            NumSlots
+        }
+
+        private static int _dpi;
+        private static bool _dpiInitialized;
+        private static readonly object _dpiLock = new object();
+        private static bool _setDpiX = true;
+        private static BitArray _cacheValid = new BitArray((int)CacheSlot.NumSlots);
+        private static int _dpiX;
+
+        internal static int Dpi
+        {
+            [SecurityCritical, SecurityTreatAsSafe]
+            get
+            {
+                if (!_dpiInitialized)
+                {
+                    lock (_dpiLock)
+                    {
+                        if (!_dpiInitialized)
+                        {
+                            using (var dc = SafeDC.GetDesktop())
+                            {
+                                if (dc.DangerousGetHandle() == IntPtr.Zero)
+                                {
+                                    throw new Win32Exception();
+                                }
+
+                                _dpi = NativeMethods.GetDeviceCaps(dc, DeviceCap.LOGPIXELSY);
+                                _dpiInitialized = true;
+                            }
+                        }
+                    }
+                }
+                return _dpi;
+            }
+        }
+
+        ///<SecurityNote>
+        ///  Critical as this accesses Native methods.
+        ///  TreatAsSafe - it would be ok to expose this information - DPI in partial trust
+        ///</SecurityNote>
+        internal static int DpiX
+        {
+            [SecurityCritical, SecurityTreatAsSafe]
+            get
+            {
+                if (_setDpiX)
+                {
+                    lock (_cacheValid)
+                    {
+                        if (_setDpiX)
+                        {
+                            _setDpiX = false;
+
+                            // Win32Exception will get the Win32 error code so we don't have to
+#pragma warning disable 6523
+                            using (var dc = SafeDC.GetDesktop())
+                            {
+                                // Detecting error case from unmanaged call, required by PREsharp to throw a Win32Exception
+#pragma warning disable 6503
+                                if (dc.DangerousGetHandle() == IntPtr.Zero)
+                                {
+                                    throw new Win32Exception();
+                                }
+#pragma warning restore 6503
+#pragma warning restore 6523
+
+                                _dpiX = NativeMethods.GetDeviceCaps(dc, DeviceCap.LOGPIXELSX);
+                                _cacheValid[(int) CacheSlot.DpiX] = true;
+                            }
+                        }
+                    }
+                }
+
+                return _dpiX;
+            }
+        }
+
+        #endregion Per monitor dpi support
 
         #region INotifyPropertyChanged Members
 

@@ -20,6 +20,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SofterWindow}">
                     <Border Background="#252525">
+                        <TextBlock Text="Hello World"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

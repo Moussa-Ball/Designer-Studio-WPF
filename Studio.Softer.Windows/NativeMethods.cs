@@ -1,7 +1,4 @@
-﻿/**************************************************************************\
-    Copyright Microsoft Corporation. All Rights Reserved.
-\**************************************************************************/
-
+﻿#pragma warning disable 1591, 618
 namespace Studio.Softer.Windows
 {
     using System;
@@ -11,38 +8,84 @@ namespace Studio.Softer.Windows
     using System.Runtime.ConstrainedExecution;
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
-    using System.Security.Permissions;
+    using System.Security;
     using System.Text;
+    
     using Microsoft.Win32.SafeHandles;
 
     // Some COM interfaces and Win32 structures are already declared in the framework.
     // Interesting ones to remember in System.Runtime.InteropServices.ComTypes are:
-    using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
-    using IPersistFile = System.Runtime.InteropServices.ComTypes.IPersistFile;
     using IStream = System.Runtime.InteropServices.ComTypes.IStream;
 
     #region Native Values
 
+    internal static class Win32Value
+    {
+        public const uint MAX_PATH = 260;
+        public const uint INFOTIPSIZE = 1024;
+        public const int TRUE = 1;
+        public const int FALSE = 0;
+        public const uint sizeof_WCHAR = 2;
+        public const uint sizeof_CHAR = 1;
+        public const uint sizeof_BOOL = 4;
+    }
+
     /// <summary>
     /// HIGHCONTRAST flags
     /// </summary>
+    
     [Flags]
-    internal enum HCF
-    { 
-        HIGHCONTRASTON  = 0x00000001,
-        AVAILABLE       = 0x00000002,
-        HOTKEYACTIVE    = 0x00000004,
-        CONFIRMHOTKEY   = 0x00000008,
-        HOTKEYSOUND     = 0x00000010,
-        INDICATOR       = 0x00000020,
+    public enum HCF
+    {
+        HIGHCONTRASTON = 0x00000001,
+        AVAILABLE = 0x00000002,
+        HOTKEYACTIVE = 0x00000004,
+        CONFIRMHOTKEY = 0x00000008,
+        HOTKEYSOUND = 0x00000010,
+        INDICATOR = 0x00000020,
         HOTKEYAVAILABLE = 0x00000040,
+    }
+
+    internal enum DROPEFFECT
+    {
+        NONE = 0,
+        COPY = 1,
+        MOVE = 2,
+        LINK = 4,
+        SCROLL = unchecked((int)0x80000000),
+    }
+
+    /// <summary>
+    /// DROPIMAGE_*
+    /// </summary>
+    internal enum DROPIMAGETYPE
+    {
+        INVALID = -1,
+        NONE = 0,
+        COPY = DROPEFFECT.COPY,
+        MOVE = DROPEFFECT.MOVE,
+        LINK = DROPEFFECT.LINK,
+        LABEL = 6,
+        WARNING = 7,
+        // Windows 7 and later
+        NOIMAGE = 8,
+    }
+
+    /// <summary>
+    /// BITMAPINFOHEADER Compression type.  BI_*.
+    /// </summary>
+    
+    public enum BI
+    {
+        RGB = 0,
     }
 
     /// <summary>
     /// CombingRgn flags.  RGN_*
     /// </summary>
-    internal enum RGN
-    { 
+    
+    public enum RGN
+    {
         /// <summary>
         /// Creates the intersection of the two combined regions.
         /// </summary>
@@ -65,7 +108,8 @@ namespace Studio.Softer.Windows
         COPY = 5,
     }
 
-    internal enum CombineRgnResult
+    
+    public enum CombineRgnResult
     {
         ERROR = 0,
         NULLREGION = 1,
@@ -176,7 +220,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// DATAOBJ_GET_ITEM_FLAGS.  DOGIF_*.
     /// </summary>
-    internal enum DOGIF
+    
+    public enum DOGIF
     {
         DEFAULT = 0x0000,
         TRAVERSE_LINK = 0x0001,    // if the item is a link get the target
@@ -185,14 +230,16 @@ namespace Studio.Softer.Windows
         ONLY_IF_ONE = 0x0008,    // only return the item if there is one item in the array
     }
 
-    internal enum DWM_SIT
+    
+    public enum DWM_SIT
     {
         None,
         DISPLAYFRAME = 1,
     }
 
+    
     [Flags]
-    internal enum ErrorModes
+    public enum ErrorModes
     {
         /// <summary>Use the system default, which is to display all error dialog boxes.</summary>
         Default = 0x0,
@@ -221,9 +268,42 @@ namespace Studio.Softer.Windows
     }
 
     /// <summary>
+    /// Non-client hit test values, HT*
+    /// </summary>
+    
+    public enum HT
+    {
+        ERROR = -2,
+        TRANSPARENT = -1,
+        NOWHERE = 0,
+        CLIENT = 1,
+        CAPTION = 2,
+        SYSMENU = 3,
+        GROWBOX = 4,
+        MENU = 5,
+        HSCROLL = 6,
+        VSCROLL = 7,
+        MINBUTTON = 8,
+        MAXBUTTON = 9,
+        LEFT = 10,
+        RIGHT = 11,
+        TOP = 12,
+        TOPLEFT = 13,
+        TOPRIGHT = 14,
+        BOTTOM = 15,
+        BOTTOMLEFT = 16,
+        BOTTOMRIGHT = 17,
+        BORDER = 18,
+        OBJECT = 19,
+        CLOSE = 20,
+        HELP = 21
+    }
+
+    /// <summary>
     /// GetClassLongPtr values, GCLP_*
     /// </summary>
-    internal enum GCLP
+    
+    public enum GCLP
     {
         HBRBACKGROUND = -10,
     }
@@ -231,7 +311,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// GetWindowLongPtr values, GWL_*
     /// </summary>
-    internal enum GWL
+    
+    public enum GWL
     {
         WNDPROC = (-4),
         HINSTANCE = (-6),
@@ -245,7 +326,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// SystemMetrics.  SM_*
     /// </summary>
-    internal enum SM
+    
+    public enum SM
     {
         CXSCREEN = 0,
         CYSCREEN = 1,
@@ -336,292 +418,294 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// SystemParameterInfo values, SPI_*
     /// </summary>
-    internal enum SPI
+    
+    public enum SPI
     {
-        GETBEEP               = 0x0001,
-        SETBEEP               = 0x0002,
-        GETMOUSE              = 0x0003,
-        SETMOUSE              = 0x0004,
-        GETBORDER             = 0x0005,
-        SETBORDER             = 0x0006,
-        GETKEYBOARDSPEED      = 0x000A,
-        SETKEYBOARDSPEED      = 0x000B,
-        LANGDRIVER            = 0x000C,
+        GETBEEP = 0x0001,
+        SETBEEP = 0x0002,
+        GETMOUSE = 0x0003,
+        SETMOUSE = 0x0004,
+        GETBORDER = 0x0005,
+        SETBORDER = 0x0006,
+        GETKEYBOARDSPEED = 0x000A,
+        SETKEYBOARDSPEED = 0x000B,
+        LANGDRIVER = 0x000C,
         ICONHORIZONTALSPACING = 0x000D,
-        GETSCREENSAVETIMEOUT  = 0x000E,
-        SETSCREENSAVETIMEOUT  = 0x000F,
-        GETSCREENSAVEACTIVE   = 0x0010,
-        SETSCREENSAVEACTIVE   = 0x0011,
-        GETGRIDGRANULARITY    = 0x0012,
-        SETGRIDGRANULARITY    = 0x0013,
-        SETDESKWALLPAPER      = 0x0014,
-        SETDESKPATTERN        = 0x0015,
-        GETKEYBOARDDELAY      = 0x0016,
-        SETKEYBOARDDELAY      = 0x0017,
-        ICONVERTICALSPACING   = 0x0018,
-        GETICONTITLEWRAP      = 0x0019,
-        SETICONTITLEWRAP      = 0x001A,
-        GETMENUDROPALIGNMENT  = 0x001B,
-        SETMENUDROPALIGNMENT  = 0x001C,
-        SETDOUBLECLKWIDTH     = 0x001D,
-        SETDOUBLECLKHEIGHT    = 0x001E,
-        GETICONTITLELOGFONT   = 0x001F,
-        SETDOUBLECLICKTIME    = 0x0020,
-        SETMOUSEBUTTONSWAP    = 0x0021,
-        SETICONTITLELOGFONT   = 0x0022,
-        GETFASTTASKSWITCH     = 0x0023,
-        SETFASTTASKSWITCH     = 0x0024,
+        GETSCREENSAVETIMEOUT = 0x000E,
+        SETSCREENSAVETIMEOUT = 0x000F,
+        GETSCREENSAVEACTIVE = 0x0010,
+        SETSCREENSAVEACTIVE = 0x0011,
+        GETGRIDGRANULARITY = 0x0012,
+        SETGRIDGRANULARITY = 0x0013,
+        SETDESKWALLPAPER = 0x0014,
+        SETDESKPATTERN = 0x0015,
+        GETKEYBOARDDELAY = 0x0016,
+        SETKEYBOARDDELAY = 0x0017,
+        ICONVERTICALSPACING = 0x0018,
+        GETICONTITLEWRAP = 0x0019,
+        SETICONTITLEWRAP = 0x001A,
+        GETMENUDROPALIGNMENT = 0x001B,
+        SETMENUDROPALIGNMENT = 0x001C,
+        SETDOUBLECLKWIDTH = 0x001D,
+        SETDOUBLECLKHEIGHT = 0x001E,
+        GETICONTITLELOGFONT = 0x001F,
+        SETDOUBLECLICKTIME = 0x0020,
+        SETMOUSEBUTTONSWAP = 0x0021,
+        SETICONTITLELOGFONT = 0x0022,
+        GETFASTTASKSWITCH = 0x0023,
+        SETFASTTASKSWITCH = 0x0024,
 
-        SETDRAGFULLWINDOWS    = 0x0025,
-        GETDRAGFULLWINDOWS    = 0x0026,
-        GETNONCLIENTMETRICS   = 0x0029,
-        SETNONCLIENTMETRICS   = 0x002A,
-        GETMINIMIZEDMETRICS   = 0x002B,
-        SETMINIMIZEDMETRICS   = 0x002C,
-        GETICONMETRICS        = 0x002D,
-        SETICONMETRICS        = 0x002E,
-        SETWORKAREA           = 0x002F,
-        GETWORKAREA           = 0x0030,
-        SETPENWINDOWS         = 0x0031,
-        GETHIGHCONTRAST       = 0x0042,
-        SETHIGHCONTRAST       = 0x0043,
-        GETKEYBOARDPREF       = 0x0044,
-        SETKEYBOARDPREF       = 0x0045,
-        GETSCREENREADER       = 0x0046,
-        SETSCREENREADER       = 0x0047,
-        GETANIMATION          = 0x0048,
-        SETANIMATION          = 0x0049,
-        GETFONTSMOOTHING      = 0x004A,
-        SETFONTSMOOTHING      = 0x004B,
-        SETDRAGWIDTH          = 0x004C,
-        SETDRAGHEIGHT         = 0x004D,
-        SETHANDHELD           = 0x004E,
-        GETLOWPOWERTIMEOUT    = 0x004F,
-        GETPOWEROFFTIMEOUT    = 0x0050,
-        SETLOWPOWERTIMEOUT    = 0x0051,
-        SETPOWEROFFTIMEOUT    = 0x0052,
-        GETLOWPOWERACTIVE     = 0x0053,
-        GETPOWEROFFACTIVE     = 0x0054,
-        SETLOWPOWERACTIVE     = 0x0055,
-        SETPOWEROFFACTIVE     = 0x0056,
-        SETCURSORS            = 0x0057,
-        SETICONS              = 0x0058,
-        GETDEFAULTINPUTLANG   = 0x0059,
-        SETDEFAULTINPUTLANG   = 0x005A,
-        SETLANGTOGGLE         = 0x005B,
-        GETWINDOWSEXTENSION   = 0x005C,
-        SETMOUSETRAILS        = 0x005D,
-        GETMOUSETRAILS        = 0x005E,
+        SETDRAGFULLWINDOWS = 0x0025,
+        GETDRAGFULLWINDOWS = 0x0026,
+        GETNONCLIENTMETRICS = 0x0029,
+        SETNONCLIENTMETRICS = 0x002A,
+        GETMINIMIZEDMETRICS = 0x002B,
+        SETMINIMIZEDMETRICS = 0x002C,
+        GETICONMETRICS = 0x002D,
+        SETICONMETRICS = 0x002E,
+        SETWORKAREA = 0x002F,
+        GETWORKAREA = 0x0030,
+        SETPENWINDOWS = 0x0031,
+        GETHIGHCONTRAST = 0x0042,
+        SETHIGHCONTRAST = 0x0043,
+        GETKEYBOARDPREF = 0x0044,
+        SETKEYBOARDPREF = 0x0045,
+        GETSCREENREADER = 0x0046,
+        SETSCREENREADER = 0x0047,
+        GETANIMATION = 0x0048,
+        SETANIMATION = 0x0049,
+        GETFONTSMOOTHING = 0x004A,
+        SETFONTSMOOTHING = 0x004B,
+        SETDRAGWIDTH = 0x004C,
+        SETDRAGHEIGHT = 0x004D,
+        SETHANDHELD = 0x004E,
+        GETLOWPOWERTIMEOUT = 0x004F,
+        GETPOWEROFFTIMEOUT = 0x0050,
+        SETLOWPOWERTIMEOUT = 0x0051,
+        SETPOWEROFFTIMEOUT = 0x0052,
+        GETLOWPOWERACTIVE = 0x0053,
+        GETPOWEROFFACTIVE = 0x0054,
+        SETLOWPOWERACTIVE = 0x0055,
+        SETPOWEROFFACTIVE = 0x0056,
+        SETCURSORS = 0x0057,
+        SETICONS = 0x0058,
+        GETDEFAULTINPUTLANG = 0x0059,
+        SETDEFAULTINPUTLANG = 0x005A,
+        SETLANGTOGGLE = 0x005B,
+        GETWINDOWSEXTENSION = 0x005C,
+        SETMOUSETRAILS = 0x005D,
+        GETMOUSETRAILS = 0x005E,
         SETSCREENSAVERRUNNING = 0x0061,
-        SCREENSAVERRUNNING    = SETSCREENSAVERRUNNING,
-        GETFILTERKEYS        = 0x0032,
-        SETFILTERKEYS        = 0x0033,
-        GETTOGGLEKEYS        = 0x0034,
-        SETTOGGLEKEYS        = 0x0035,
-        GETMOUSEKEYS         = 0x0036,
-        SETMOUSEKEYS         = 0x0037,
-        GETSHOWSOUNDS        = 0x0038,
-        SETSHOWSOUNDS        = 0x0039,
-        GETSTICKYKEYS        = 0x003A,
-        SETSTICKYKEYS        = 0x003B,
-        GETACCESSTIMEOUT     = 0x003C,
-        SETACCESSTIMEOUT     = 0x003D,
+        SCREENSAVERRUNNING = SETSCREENSAVERRUNNING,
+        GETFILTERKEYS = 0x0032,
+        SETFILTERKEYS = 0x0033,
+        GETTOGGLEKEYS = 0x0034,
+        SETTOGGLEKEYS = 0x0035,
+        GETMOUSEKEYS = 0x0036,
+        SETMOUSEKEYS = 0x0037,
+        GETSHOWSOUNDS = 0x0038,
+        SETSHOWSOUNDS = 0x0039,
+        GETSTICKYKEYS = 0x003A,
+        SETSTICKYKEYS = 0x003B,
+        GETACCESSTIMEOUT = 0x003C,
+        SETACCESSTIMEOUT = 0x003D,
 
-        GETSERIALKEYS        = 0x003E,
-        SETSERIALKEYS        = 0x003F,
-        GETSOUNDSENTRY       = 0x0040,
-        SETSOUNDSENTRY       = 0x0041,
-        GETSNAPTODEFBUTTON   = 0x005F,
-        SETSNAPTODEFBUTTON   = 0x0060,
-        GETMOUSEHOVERWIDTH   = 0x0062,
-        SETMOUSEHOVERWIDTH   = 0x0063,
-        GETMOUSEHOVERHEIGHT  = 0x0064,
-        SETMOUSEHOVERHEIGHT  = 0x0065,
-        GETMOUSEHOVERTIME    = 0x0066,
-        SETMOUSEHOVERTIME    = 0x0067,
-        GETWHEELSCROLLLINES  = 0x0068,
-        SETWHEELSCROLLLINES  = 0x0069,
-        GETMENUSHOWDELAY     = 0x006A,
-        SETMENUSHOWDELAY     = 0x006B,
+        GETSERIALKEYS = 0x003E,
+        SETSERIALKEYS = 0x003F,
+        GETSOUNDSENTRY = 0x0040,
+        SETSOUNDSENTRY = 0x0041,
+        GETSNAPTODEFBUTTON = 0x005F,
+        SETSNAPTODEFBUTTON = 0x0060,
+        GETMOUSEHOVERWIDTH = 0x0062,
+        SETMOUSEHOVERWIDTH = 0x0063,
+        GETMOUSEHOVERHEIGHT = 0x0064,
+        SETMOUSEHOVERHEIGHT = 0x0065,
+        GETMOUSEHOVERTIME = 0x0066,
+        SETMOUSEHOVERTIME = 0x0067,
+        GETWHEELSCROLLLINES = 0x0068,
+        SETWHEELSCROLLLINES = 0x0069,
+        GETMENUSHOWDELAY = 0x006A,
+        SETMENUSHOWDELAY = 0x006B,
 
         GETWHEELSCROLLCHARS = 0x006C,
         SETWHEELSCROLLCHARS = 0x006D,
 
-        GETSHOWIMEUI        = 0x006E,
-        SETSHOWIMEUI        = 0x006F,
+        GETSHOWIMEUI = 0x006E,
+        SETSHOWIMEUI = 0x006F,
 
-        GETMOUSESPEED       = 0x0070,
-        SETMOUSESPEED       = 0x0071,
+        GETMOUSESPEED = 0x0070,
+        SETMOUSESPEED = 0x0071,
         GETSCREENSAVERRUNNING = 0x0072,
-        GETDESKWALLPAPER    = 0x0073,
-    
+        GETDESKWALLPAPER = 0x0073,
+
         GETAUDIODESCRIPTION = 0x0074,
         SETAUDIODESCRIPTION = 0x0075,
 
         GETSCREENSAVESECURE = 0x0076,
         SETSCREENSAVESECURE = 0x0077,
 
-        GETHUNGAPPTIMEOUT         = 0x0078,
-        SETHUNGAPPTIMEOUT         = 0x0079,
-        GETWAITTOKILLTIMEOUT      = 0x007A,
-        SETWAITTOKILLTIMEOUT      = 0x007B,
+        GETHUNGAPPTIMEOUT = 0x0078,
+        SETHUNGAPPTIMEOUT = 0x0079,
+        GETWAITTOKILLTIMEOUT = 0x007A,
+        SETWAITTOKILLTIMEOUT = 0x007B,
         GETWAITTOKILLSERVICETIMEOUT = 0x007C,
         SETWAITTOKILLSERVICETIMEOUT = 0x007D,
-        GETMOUSEDOCKTHRESHOLD     = 0x007E,
-        SETMOUSEDOCKTHRESHOLD     = 0x007F,
-        GETPENDOCKTHRESHOLD       = 0x0080,
-        SETPENDOCKTHRESHOLD       = 0x0081,
-        GETWINARRANGING           = 0x0082,
-        SETWINARRANGING           = 0x0083,
-        GETMOUSEDRAGOUTTHRESHOLD  = 0x0084,
-        SETMOUSEDRAGOUTTHRESHOLD  = 0x0085,
-        GETPENDRAGOUTTHRESHOLD    = 0x0086,
-        SETPENDRAGOUTTHRESHOLD    = 0x0087,
+        GETMOUSEDOCKTHRESHOLD = 0x007E,
+        SETMOUSEDOCKTHRESHOLD = 0x007F,
+        GETPENDOCKTHRESHOLD = 0x0080,
+        SETPENDOCKTHRESHOLD = 0x0081,
+        GETWINARRANGING = 0x0082,
+        SETWINARRANGING = 0x0083,
+        GETMOUSEDRAGOUTTHRESHOLD = 0x0084,
+        SETMOUSEDRAGOUTTHRESHOLD = 0x0085,
+        GETPENDRAGOUTTHRESHOLD = 0x0086,
+        SETPENDRAGOUTTHRESHOLD = 0x0087,
         GETMOUSESIDEMOVETHRESHOLD = 0x0088,
         SETMOUSESIDEMOVETHRESHOLD = 0x0089,
-        GETPENSIDEMOVETHRESHOLD   = 0x008A,
-        SETPENSIDEMOVETHRESHOLD   = 0x008B,
-        GETDRAGFROMMAXIMIZE       = 0x008C,
-        SETDRAGFROMMAXIMIZE       = 0x008D,
-        GETSNAPSIZING             = 0x008E,
-        SETSNAPSIZING             = 0x008F,
-        GETDOCKMOVING             = 0x0090,
-        SETDOCKMOVING             = 0x0091,
-        
-        GETACTIVEWINDOWTRACKING       = 0x1000,
-        SETACTIVEWINDOWTRACKING       = 0x1001,
-        GETMENUANIMATION              = 0x1002,
-        SETMENUANIMATION              = 0x1003,
-        GETCOMBOBOXANIMATION          = 0x1004,
-        SETCOMBOBOXANIMATION          = 0x1005,
-        GETLISTBOXSMOOTHSCROLLING     = 0x1006,
-        SETLISTBOXSMOOTHSCROLLING     = 0x1007,
-        GETGRADIENTCAPTIONS           = 0x1008,
-        SETGRADIENTCAPTIONS           = 0x1009,
-        GETKEYBOARDCUES               = 0x100A,
-        SETKEYBOARDCUES               = 0x100B,
-        GETMENUUNDERLINES             = GETKEYBOARDCUES,
-        SETMENUUNDERLINES             = SETKEYBOARDCUES,
-        GETACTIVEWNDTRKZORDER         = 0x100C,
-        SETACTIVEWNDTRKZORDER         = 0x100D,
-        GETHOTTRACKING                = 0x100E,
-        SETHOTTRACKING                = 0x100F,
-        GETMENUFADE                   = 0x1012,
-        SETMENUFADE                   = 0x1013,
-        GETSELECTIONFADE              = 0x1014,
-        SETSELECTIONFADE              = 0x1015,
-        GETTOOLTIPANIMATION           = 0x1016,
-        SETTOOLTIPANIMATION           = 0x1017,
-        GETTOOLTIPFADE                = 0x1018,
-        SETTOOLTIPFADE                = 0x1019,
-        GETCURSORSHADOW               = 0x101A,
-        SETCURSORSHADOW               = 0x101B,
-        GETMOUSESONAR                 = 0x101C,
-        SETMOUSESONAR                 = 0x101D,
-        GETMOUSECLICKLOCK             = 0x101E,
-        SETMOUSECLICKLOCK             = 0x101F,
-        GETMOUSEVANISH                = 0x1020,
-        SETMOUSEVANISH                = 0x1021,
-        GETFLATMENU                   = 0x1022,
-        SETFLATMENU                   = 0x1023,
-        GETDROPSHADOW                 = 0x1024,
-        SETDROPSHADOW                 = 0x1025,
-        GETBLOCKSENDINPUTRESETS       = 0x1026,
-        SETBLOCKSENDINPUTRESETS       = 0x1027,
-        
-        GETUIEFFECTS                  = 0x103E,
-        SETUIEFFECTS                  = 0x103F,
-        
-        GETDISABLEOVERLAPPEDCONTENT   = 0x1040,
-        SETDISABLEOVERLAPPEDCONTENT   = 0x1041,
-        GETCLIENTAREAANIMATION        = 0x1042,
-        SETCLIENTAREAANIMATION        = 0x1043,
-        GETCLEARTYPE                  = 0x1048,
-        SETCLEARTYPE                  = 0x1049,
-        GETSPEECHRECOGNITION          = 0x104A,
-        SETSPEECHRECOGNITION          = 0x104B,
-        
-        GETFOREGROUNDLOCKTIMEOUT      = 0x2000,
-        SETFOREGROUNDLOCKTIMEOUT      = 0x2001,
-        GETACTIVEWNDTRKTIMEOUT        = 0x2002,
-        SETACTIVEWNDTRKTIMEOUT        = 0x2003,
-        GETFOREGROUNDFLASHCOUNT       = 0x2004,
-        SETFOREGROUNDFLASHCOUNT       = 0x2005,
-        GETCARETWIDTH                 = 0x2006,
-        SETCARETWIDTH                 = 0x2007,
-        
-        GETMOUSECLICKLOCKTIME         = 0x2008,
-        SETMOUSECLICKLOCKTIME         = 0x2009,
-        GETFONTSMOOTHINGTYPE          = 0x200A,
-        SETFONTSMOOTHINGTYPE          = 0x200B,
+        GETPENSIDEMOVETHRESHOLD = 0x008A,
+        SETPENSIDEMOVETHRESHOLD = 0x008B,
+        GETDRAGFROMMAXIMIZE = 0x008C,
+        SETDRAGFROMMAXIMIZE = 0x008D,
+        GETSNAPSIZING = 0x008E,
+        SETSNAPSIZING = 0x008F,
+        GETDOCKMOVING = 0x0090,
+        SETDOCKMOVING = 0x0091,
 
-        GETFONTSMOOTHINGCONTRAST         = 0x200C,
-        SETFONTSMOOTHINGCONTRAST         = 0x200D,
+        GETACTIVEWINDOWTRACKING = 0x1000,
+        SETACTIVEWINDOWTRACKING = 0x1001,
+        GETMENUANIMATION = 0x1002,
+        SETMENUANIMATION = 0x1003,
+        GETCOMBOBOXANIMATION = 0x1004,
+        SETCOMBOBOXANIMATION = 0x1005,
+        GETLISTBOXSMOOTHSCROLLING = 0x1006,
+        SETLISTBOXSMOOTHSCROLLING = 0x1007,
+        GETGRADIENTCAPTIONS = 0x1008,
+        SETGRADIENTCAPTIONS = 0x1009,
+        GETKEYBOARDCUES = 0x100A,
+        SETKEYBOARDCUES = 0x100B,
+        GETMENUUNDERLINES = GETKEYBOARDCUES,
+        SETMENUUNDERLINES = SETKEYBOARDCUES,
+        GETACTIVEWNDTRKZORDER = 0x100C,
+        SETACTIVEWNDTRKZORDER = 0x100D,
+        GETHOTTRACKING = 0x100E,
+        SETHOTTRACKING = 0x100F,
+        GETMENUFADE = 0x1012,
+        SETMENUFADE = 0x1013,
+        GETSELECTIONFADE = 0x1014,
+        SETSELECTIONFADE = 0x1015,
+        GETTOOLTIPANIMATION = 0x1016,
+        SETTOOLTIPANIMATION = 0x1017,
+        GETTOOLTIPFADE = 0x1018,
+        SETTOOLTIPFADE = 0x1019,
+        GETCURSORSHADOW = 0x101A,
+        SETCURSORSHADOW = 0x101B,
+        GETMOUSESONAR = 0x101C,
+        SETMOUSESONAR = 0x101D,
+        GETMOUSECLICKLOCK = 0x101E,
+        SETMOUSECLICKLOCK = 0x101F,
+        GETMOUSEVANISH = 0x1020,
+        SETMOUSEVANISH = 0x1021,
+        GETFLATMENU = 0x1022,
+        SETFLATMENU = 0x1023,
+        GETDROPSHADOW = 0x1024,
+        SETDROPSHADOW = 0x1025,
+        GETBLOCKSENDINPUTRESETS = 0x1026,
+        SETBLOCKSENDINPUTRESETS = 0x1027,
 
-        GETFOCUSBORDERWIDTH           = 0x200E,
-        SETFOCUSBORDERWIDTH           = 0x200F,
-        GETFOCUSBORDERHEIGHT          = 0x2010,
-        SETFOCUSBORDERHEIGHT          = 0x2011,
+        GETUIEFFECTS = 0x103E,
+        SETUIEFFECTS = 0x103F,
 
-        GETFONTSMOOTHINGORIENTATION         = 0x2012,
-        SETFONTSMOOTHINGORIENTATION         = 0x2013,
+        GETDISABLEOVERLAPPEDCONTENT = 0x1040,
+        SETDISABLEOVERLAPPEDCONTENT = 0x1041,
+        GETCLIENTAREAANIMATION = 0x1042,
+        SETCLIENTAREAANIMATION = 0x1043,
+        GETCLEARTYPE = 0x1048,
+        SETCLEARTYPE = 0x1049,
+        GETSPEECHRECOGNITION = 0x104A,
+        SETSPEECHRECOGNITION = 0x104B,
 
-        GETMINIMUMHITRADIUS           = 0x2014,
-        SETMINIMUMHITRADIUS           = 0x2015,
-        GETMESSAGEDURATION            = 0x2016,
-        SETMESSAGEDURATION            = 0x2017,
+        GETFOREGROUNDLOCKTIMEOUT = 0x2000,
+        SETFOREGROUNDLOCKTIMEOUT = 0x2001,
+        GETACTIVEWNDTRKTIMEOUT = 0x2002,
+        SETACTIVEWNDTRKTIMEOUT = 0x2003,
+        GETFOREGROUNDFLASHCOUNT = 0x2004,
+        SETFOREGROUNDFLASHCOUNT = 0x2005,
+        GETCARETWIDTH = 0x2006,
+        SETCARETWIDTH = 0x2007,
+
+        GETMOUSECLICKLOCKTIME = 0x2008,
+        SETMOUSECLICKLOCKTIME = 0x2009,
+        GETFONTSMOOTHINGTYPE = 0x200A,
+        SETFONTSMOOTHINGTYPE = 0x200B,
+
+        GETFONTSMOOTHINGCONTRAST = 0x200C,
+        SETFONTSMOOTHINGCONTRAST = 0x200D,
+
+        GETFOCUSBORDERWIDTH = 0x200E,
+        SETFOCUSBORDERWIDTH = 0x200F,
+        GETFOCUSBORDERHEIGHT = 0x2010,
+        SETFOCUSBORDERHEIGHT = 0x2011,
+
+        GETFONTSMOOTHINGORIENTATION = 0x2012,
+        SETFONTSMOOTHINGORIENTATION = 0x2013,
+
+        GETMINIMUMHITRADIUS = 0x2014,
+        SETMINIMUMHITRADIUS = 0x2015,
+        GETMESSAGEDURATION = 0x2016,
+        SETMESSAGEDURATION = 0x2017,
     }
 
     /// <summary>
     /// SystemParameterInfo flag values, SPIF_*
     /// </summary>
+    
     [Flags]
-    internal enum SPIF
+    public enum SPIF
     {
         None = 0,
         UPDATEINIFILE = 0x01,
-        SENDCHANGE = 0x02,
-        SENDWININICHANGE = SENDCHANGE,
+        SENDWININICHANGE = 0x02,
     }
 
     [Flags]
     internal enum STATE_SYSTEM
     {
-        UNAVAILABLE      = 0x00000001, // Disabled
-        SELECTED         = 0x00000002,
-        FOCUSED          = 0x00000004,
-        PRESSED          = 0x00000008,
-        CHECKED          = 0x00000010,
-        MIXED            = 0x00000020,  // 3-state checkbox or toolbar button
-        INDETERMINATE    = MIXED,
-        READONLY         = 0x00000040,
-        HOTTRACKED       = 0x00000080,
-        DEFAULT          = 0x00000100,
-        EXPANDED         = 0x00000200,
-        COLLAPSED        = 0x00000400,
-        BUSY             = 0x00000800,
-        FLOATING         = 0x00001000,  // Children "owned" not "contained" by parent
-        MARQUEED         = 0x00002000,
-        ANIMATED         = 0x00004000,
-        INVISIBLE        = 0x00008000,
-        OFFSCREEN        = 0x00010000,
-        SIZEABLE         = 0x00020000,
-        MOVEABLE         = 0x00040000,
-        SELFVOICING      = 0x00080000,
-        FOCUSABLE        = 0x00100000,
-        SELECTABLE       = 0x00200000,
-        LINKED           = 0x00400000,
-        TRAVERSED        = 0x00800000,
-        MULTISELECTABLE  = 0x01000000,  // Supports multiple selection
-        EXTSELECTABLE    = 0x02000000,  // Supports extended selection
-        ALERT_LOW        = 0x04000000,  // This information is of low priority
-        ALERT_MEDIUM     = 0x08000000,  // This information is of medium priority
-        ALERT_HIGH       = 0x10000000,  // This information is of high priority
-        PROTECTED        = 0x20000000,  // access to this is restricted
-        VALID            = 0x3FFFFFFF,
+        UNAVAILABLE = 0x00000001, // Disabled
+        SELECTED = 0x00000002,
+        FOCUSED = 0x00000004,
+        PRESSED = 0x00000008,
+        CHECKED = 0x00000010,
+        MIXED = 0x00000020,  // 3-state checkbox or toolbar button
+        INDETERMINATE = MIXED,
+        READONLY = 0x00000040,
+        HOTTRACKED = 0x00000080,
+        DEFAULT = 0x00000100,
+        EXPANDED = 0x00000200,
+        COLLAPSED = 0x00000400,
+        BUSY = 0x00000800,
+        FLOATING = 0x00001000,  // Children "owned" not "contained" by parent
+        MARQUEED = 0x00002000,
+        ANIMATED = 0x00004000,
+        INVISIBLE = 0x00008000,
+        OFFSCREEN = 0x00010000,
+        SIZEABLE = 0x00020000,
+        MOVEABLE = 0x00040000,
+        SELFVOICING = 0x00080000,
+        FOCUSABLE = 0x00100000,
+        SELECTABLE = 0x00200000,
+        LINKED = 0x00400000,
+        TRAVERSED = 0x00800000,
+        MULTISELECTABLE = 0x01000000,  // Supports multiple selection
+        EXTSELECTABLE = 0x02000000,  // Supports extended selection
+        ALERT_LOW = 0x04000000,  // This information is of low priority
+        ALERT_MEDIUM = 0x08000000,  // This information is of medium priority
+        ALERT_HIGH = 0x10000000,  // This information is of high priority
+        PROTECTED = 0x20000000,  // access to this is restricted
+        VALID = 0x3FFFFFFF,
     }
 
-    internal enum StockObject : int
+    
+    public enum StockObject : int
     {
         WHITE_BRUSH = 0,
         LTGRAY_BRUSH = 1,
@@ -640,8 +724,9 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// CS_*
     /// </summary>
+    
     [Flags]
-    internal enum CS : uint
+    public enum CS : uint
     {
         VREDRAW = 0x0001,
         HREDRAW = 0x0002,
@@ -661,8 +746,9 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// WindowStyle values, WS_*
     /// </summary>
+    
     [Flags]
-    internal enum WS : uint
+    public enum WS : uint
     {
         OVERLAPPED = 0x00000000,
         POPUP = 0x80000000,
@@ -697,10 +783,184 @@ namespace Studio.Softer.Windows
     }
 
     /// <summary>
+    /// Window message values, WM_*
+    /// </summary>
+    
+    public enum WM
+    {
+        NULL = 0x0000,
+        CREATE = 0x0001,
+        DESTROY = 0x0002,
+        MOVE = 0x0003,
+        SIZE = 0x0005,
+        ACTIVATE = 0x0006,
+        SETFOCUS = 0x0007,
+        KILLFOCUS = 0x0008,
+        ENABLE = 0x000A,
+        SETREDRAW = 0x000B,
+        SETTEXT = 0x000C,
+        GETTEXT = 0x000D,
+        GETTEXTLENGTH = 0x000E,
+        PAINT = 0x000F,
+        CLOSE = 0x0010,
+        QUERYENDSESSION = 0x0011,
+        QUIT = 0x0012,
+        QUERYOPEN = 0x0013,
+        ERASEBKGND = 0x0014,
+        SYSCOLORCHANGE = 0x0015,
+        SHOWWINDOW = 0x0018,
+        CTLCOLOR = 0x0019,
+        WININICHANGE = 0x001A,
+        SETTINGCHANGE = 0x001A,
+        ACTIVATEAPP = 0x001C,
+        SETCURSOR = 0x0020,
+        MOUSEACTIVATE = 0x0021,
+        CHILDACTIVATE = 0x0022,
+        QUEUESYNC = 0x0023,
+        GETMINMAXINFO = 0x0024,
+
+        WINDOWPOSCHANGING = 0x0046,
+        WINDOWPOSCHANGED = 0x0047,
+
+        CONTEXTMENU = 0x007B,
+        STYLECHANGING = 0x007C,
+        STYLECHANGED = 0x007D,
+        DISPLAYCHANGE = 0x007E,
+        GETICON = 0x007F,
+        SETICON = 0x0080,
+        NCCREATE = 0x0081,
+        NCDESTROY = 0x0082,
+        NCCALCSIZE = 0x0083,
+        NCHITTEST = 0x0084,
+        NCPAINT = 0x0085,
+        NCACTIVATE = 0x0086,
+        GETDLGCODE = 0x0087,
+        SYNCPAINT = 0x0088,
+        NCMOUSEMOVE = 0x00A0,
+        NCLBUTTONDOWN = 0x00A1,
+        NCLBUTTONUP = 0x00A2,
+        NCLBUTTONDBLCLK = 0x00A3,
+        NCRBUTTONDOWN = 0x00A4,
+        NCRBUTTONUP = 0x00A5,
+        NCRBUTTONDBLCLK = 0x00A6,
+        NCMBUTTONDOWN = 0x00A7,
+        NCMBUTTONUP = 0x00A8,
+        NCMBUTTONDBLCLK = 0x00A9,
+
+        SYSKEYDOWN = 0x0104,
+        SYSKEYUP = 0x0105,
+        SYSCHAR = 0x0106,
+        SYSDEADCHAR = 0x0107,
+        COMMAND = 0x0111,
+        SYSCOMMAND = 0x0112,
+
+        // These two messages aren't defined in winuser.h, but they are sent to windows
+        // with captions. They appear to paint the window caption and frame.
+        // Unfortunately if you override the standard non-client rendering as we do
+        // with CustomFrameWindow, sometimes Windows (not deterministically
+        // reproducibly but definitely frequently) will send these messages to the
+        // window and paint the standard caption/title over the top of the custom one.
+        // So we need to handle these messages in CustomFrameWindow to prevent this
+        // from happening.
+        NCUAHDRAWCAPTION = 0xAE,
+        NCUAHDRAWFRAME = 0xAF,
+
+        MOUSEMOVE = 0x0200,
+        LBUTTONDOWN = 0x0201,
+        LBUTTONUP = 0x0202,
+        LBUTTONDBLCLK = 0x0203,
+        RBUTTONDOWN = 0x0204,
+        RBUTTONUP = 0x0205,
+        RBUTTONDBLCLK = 0x0206,
+        MBUTTONDOWN = 0x0207,
+        MBUTTONUP = 0x0208,
+        MBUTTONDBLCLK = 0x0209,
+        MOUSEWHEEL = 0x020A,
+        XBUTTONDOWN = 0x020B,
+        XBUTTONUP = 0x020C,
+        XBUTTONDBLCLK = 0x020D,
+        MOUSEHWHEEL = 0x020E,
+        PARENTNOTIFY = 0x0210,
+
+        SIZING = 0x0214,
+
+        CAPTURECHANGED = 0x0215,
+        POWERBROADCAST = 0x0218,
+        DEVICECHANGE = 0x0219,
+
+        ENTERSIZEMOVE = 0x0231,
+        EXITSIZEMOVE = 0x0232,
+
+        IME_SETCONTEXT = 0x0281,
+        IME_NOTIFY = 0x0282,
+        IME_CONTROL = 0x0283,
+        IME_COMPOSITIONFULL = 0x0284,
+        IME_SELECT = 0x0285,
+        IME_CHAR = 0x0286,
+        IME_REQUEST = 0x0288,
+        IME_KEYDOWN = 0x0290,
+        IME_KEYUP = 0x0291,
+
+        NCMOUSELEAVE = 0x02A2,
+
+        TABLET_DEFBASE = 0x02C0,
+        //WM_TABLET_MAXOFFSET = 0x20,
+
+        TABLET_ADDED = TABLET_DEFBASE + 8,
+        TABLET_DELETED = TABLET_DEFBASE + 9,
+        TABLET_FLICK = TABLET_DEFBASE + 11,
+        TABLET_QUERYSYSTEMGESTURESTATUS = TABLET_DEFBASE + 12,
+
+        CUT = 0x0300,
+        COPY = 0x0301,
+        PASTE = 0x0302,
+        CLEAR = 0x0303,
+        UNDO = 0x0304,
+        RENDERFORMAT = 0x0305,
+        RENDERALLFORMATS = 0x0306,
+        DESTROYCLIPBOARD = 0x0307,
+        DRAWCLIPBOARD = 0x0308,
+        PAINTCLIPBOARD = 0x0309,
+        VSCROLLCLIPBOARD = 0x030A,
+        SIZECLIPBOARD = 0x030B,
+        ASKCBFORMATNAME = 0x030C,
+        CHANGECBCHAIN = 0x030D,
+        HSCROLLCLIPBOARD = 0x030E,
+        QUERYNEWPALETTE = 0x030F,
+        PALETTEISCHANGING = 0x0310,
+        PALETTECHANGED = 0x0311,
+        HOTKEY = 0x0312,
+        PRINT = 0x0317,
+        PRINTCLIENT = 0x0318,
+        APPCOMMAND = 0x0319,
+        THEMECHANGED = 0x031A,
+
+        DWMCOMPOSITIONCHANGED = 0x031E,
+        DWMNCRENDERINGCHANGED = 0x031F,
+        DWMCOLORIZATIONCOLORCHANGED = 0x0320,
+        DWMWINDOWMAXIMIZEDCHANGE = 0x0321,
+
+        GETTITLEBARINFOEX = 0x033F,
+
+        #region Windows 7
+        DWMSENDICONICTHUMBNAIL = 0x0323,
+        DWMSENDICONICLIVEPREVIEWBITMAP = 0x0326,
+        #endregion
+
+        USER = 0x0400,
+
+        // This is the hard-coded message value used by WinForms for Shell_NotifyIcon.
+        // It's relatively safe to reuse.
+        TRAYMOUSEMESSAGE = 0x800, //WM_USER + 1024
+        APP = 0x8000,
+    }
+
+    /// <summary>
     /// Window style extended values, WS_EX_*
     /// </summary>
     [Flags]
-    internal enum WS_EX : uint
+    
+    public enum WS_EX : uint
     {
         None = 0,
         DLGMODALFRAME = 0x00000001,
@@ -734,7 +994,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// GetDeviceCaps nIndex values.
     /// </summary>
-    internal enum DeviceCap
+    
+    public enum DeviceCap
     {
         /// <summary>Number of bits per pixel
         /// </summary>
@@ -753,7 +1014,8 @@ namespace Studio.Softer.Windows
         LOGPIXELSY = 90,
     }
 
-    internal enum FO : int
+    
+    public enum FO : int
     {
         MOVE = 0x0001,
         COPY = 0x0002,
@@ -764,7 +1026,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// "FILEOP_FLAGS", FOF_*.
     /// </summary>
-    internal enum FOF : ushort
+    
+    public enum FOF : ushort
     {
         MULTIDESTFILES = 0x0001,
         CONFIRMMOUSE = 0x0002,
@@ -787,8 +1050,9 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// EnableMenuItem uEnable values, MF_*
     /// </summary>
+    
     [Flags]
-    internal enum MF : uint
+    public enum MF : uint
     {
         /// <summary>
         /// Possible return value for EnableMenuItem
@@ -801,7 +1065,8 @@ namespace Studio.Softer.Windows
     }
 
     /// <summary>Specifies the type of visual style attribute to set on a window.</summary>
-    internal enum WINDOWTHEMEATTRIBUTETYPE : uint
+    
+    public enum WINDOWTHEMEATTRIBUTETYPE : uint
     {
         /// <summary>Non-client area window attributes will be set.</summary>
         WTA_NONCLIENT = 1,
@@ -810,7 +1075,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// DWMFLIP3DWINDOWPOLICY.  DWMFLIP3D_*
     /// </summary>
-    internal enum DWMFLIP3D
+    
+    public enum DWMFLIP3D 
     {
         DEFAULT,
         EXCLUDEBELOW,
@@ -856,8 +1122,9 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// WindowThemeNonClientAttributes
     /// </summary>
+    
     [Flags]
-    internal enum WTNCA : uint
+    public enum WTNCA : uint
     {
         /// <summary>Prevents the window caption from being drawn.</summary>
         NODRAWCAPTION = 0x00000001,
@@ -874,8 +1141,9 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// SetWindowPos options
     /// </summary>
+    
     [Flags]
-    internal enum SWP
+    public enum SWP
     {
         ASYNCWINDOWPOS = 0x4000,
         DEFERERASE = 0x2000,
@@ -892,12 +1160,15 @@ namespace Studio.Softer.Windows
         NOSIZE = 0x0001,
         NOZORDER = 0x0004,
         SHOWWINDOW = 0x0040,
+
+        TOPMOST = NOACTIVATE | NOOWNERZORDER | NOSIZE | NOMOVE | NOREDRAW | NOSENDCHANGING
     }
 
     /// <summary>
     /// ShowWindow options
     /// </summary>
-    internal enum SW
+    
+    public enum SW
     {
         HIDE = 0,
         SHOWNORMAL = 1,
@@ -915,10 +1186,12 @@ namespace Studio.Softer.Windows
         FORCEMINIMIZE = 11,
     }
 
-    internal enum SC
+    
+    public enum SC
     {
         SIZE = 0xF000,
         MOVE = 0xF010,
+        MOUSEMOVE = 0xF012,
         MINIMIZE = 0xF020,
         MAXIMIZE = 0xF030,
         NEXTWINDOW = 0xF040,
@@ -948,7 +1221,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// GDI+ Status codes
     /// </summary>
-    internal enum Status
+    
+    public enum Status
     {
         Ok = 0,
         GenericError = 1,
@@ -984,7 +1258,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// MSGFLT_*.  New in Vista.  Realiased in Windows 7.
     /// </summary>
-    internal enum MSGFLT
+    
+    public enum MSGFLT
     {
         // Win7 versions of this enum:
         RESET = 0,
@@ -996,7 +1271,8 @@ namespace Studio.Softer.Windows
         // REMOVE = 2,
     }
 
-    internal enum MSGFLTINFO
+    
+    public enum MSGFLTINFO
     {
         NONE = 0,
         ALREADYALLOWED_FORWND = 1,
@@ -1012,7 +1288,8 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// Shell_NotifyIcon messages.  NIM_*
     /// </summary>
-    internal enum NIM : uint
+    
+    public enum NIM : uint
     {
         ADD = 0,
         MODIFY = 1,
@@ -1035,8 +1312,9 @@ namespace Studio.Softer.Windows
         APPIDINFOLINK = 0x00000007, // indicates the data type is a pointer to a SHARDAPPIDINFOLINK structure 
     }
 
+    
     [Flags]
-    enum SLGP
+    public enum SLGP
     {
         SHORTPATH = 0x1,
         UNCPRIORITY = 0x2,
@@ -1046,8 +1324,9 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// Shell_NotifyIcon flags.  NIF_*
     /// </summary>
+    
     [Flags]
-    internal enum NIF : uint
+    public enum NIF : uint
     {
         MESSAGE = 0x0001,
         ICON = 0x0002,
@@ -1093,13 +1372,15 @@ namespace Studio.Softer.Windows
     /// <summary>
     /// AC_*
     /// </summary>
-    internal enum AC : byte
+    
+    public enum AC : byte
     {
         SRC_OVER = 0,
         SRC_ALPHA = 1,
     }
 
-    internal enum ULW
+    
+    public enum ULW
     {
         ALPHA = 2,
         COLORKEY = 1,
@@ -1118,13 +1399,42 @@ namespace Studio.Softer.Windows
         REDRAW = HREDRAW | VREDRAW,
     }
 
+    internal enum DSH
+    {
+        ALLOWDROPDESCRIPTIONTEXT = 1,
+    }
+
+    internal enum ABEdge
+    {
+        ABE_LEFT = 0,
+        ABE_TOP = 1,
+        ABE_RIGHT = 2,
+        ABE_BOTTOM = 3
+    }
+
+    internal enum ABMsg
+    {
+        ABM_NEW = 0,
+        ABM_REMOVE = 1,
+        ABM_QUERYPOS = 2,
+        ABM_SETPOS = 3,
+        ABM_GETSTATE = 4,
+        ABM_GETTASKBARPOS = 5,
+        ABM_ACTIVATE = 6,
+        ABM_GETAUTOHIDEBAR = 7,
+        ABM_SETAUTOHIDEBAR = 8,
+        ABM_WINDOWPOSCHANGED = 9,
+        ABM_SETSTATE = 10
+    }
+
     #endregion
 
     #region SafeHandles
 
-    internal sealed class SafeFindHandle : SafeHandleZeroOrMinusOneIsInvalid
+    
+    public sealed class SafeFindHandle : SafeHandleZeroOrMinusOneIsInvalid
     {
-        [SecurityPermission(SecurityAction.LinkDemand, UnmanagedCode = true)]
+        [SecurityCritical]
         private SafeFindHandle() : base(true) { }
 
         protected override bool ReleaseHandle()
@@ -1133,7 +1443,8 @@ namespace Studio.Softer.Windows
         }
     }
 
-    internal sealed class SafeDC : SafeHandleZeroOrMinusOneIsInvalid
+    
+    public sealed class SafeDC : SafeHandleZeroOrMinusOneIsInvalid
     {
         private static class NativeMethods
         {
@@ -1163,6 +1474,7 @@ namespace Studio.Softer.Windows
         private IntPtr? _hwnd;
         private bool _created;
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public IntPtr Hwnd
         {
             set
@@ -1250,6 +1562,7 @@ namespace Studio.Softer.Windows
             return dc;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static SafeDC GetDC(IntPtr hwnd)
         {
             SafeDC dc = null;
@@ -1274,11 +1587,15 @@ namespace Studio.Softer.Windows
             return dc;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static SafeDC GetDesktop()
         {
             return GetDC(IntPtr.Zero);
         }
 
+        // In method 'SafeDC.WrapDC(IntPtr)', object '<>g__initLocal0' is not disposed along all exception paths.
+        // Call System.IDisposable.Dispose on object '<>g__initLocal0' before all references to it are out of scope.
+        // Sure...
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static SafeDC WrapDC(IntPtr hdc)
@@ -1293,7 +1610,8 @@ namespace Studio.Softer.Windows
         }
     }
 
-    internal sealed class SafeHBITMAP : SafeHandleZeroOrMinusOneIsInvalid
+    
+    public sealed class SafeHBITMAP : SafeHandleZeroOrMinusOneIsInvalid
     {
         private SafeHBITMAP() : base(true) { }
 
@@ -1306,7 +1624,10 @@ namespace Studio.Softer.Windows
 
     internal sealed class SafeGdiplusStartupToken : SafeHandleZeroOrMinusOneIsInvalid
     {
-        private SafeGdiplusStartupToken() : base(true) { }
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        private SafeGdiplusStartupToken(IntPtr ptr) : base(true) {
+            handle = ptr;
+        }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
         protected override bool ReleaseHandle()
@@ -1315,21 +1636,18 @@ namespace Studio.Softer.Windows
             return s == Status.Ok;
         }
 
-        [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
         public static SafeGdiplusStartupToken Startup()
         {
-            SafeGdiplusStartupToken safeHandle = new SafeGdiplusStartupToken();
             IntPtr unsafeHandle;
             StartupOutput output;
             Status s = NativeMethods.GdiplusStartup(out unsafeHandle, new StartupInput(), out output);
             if (s == Status.Ok)
             {
-                safeHandle.handle = unsafeHandle;
+                SafeGdiplusStartupToken safeHandle = new SafeGdiplusStartupToken(unsafeHandle);
                 return safeHandle;
             }
-            safeHandle.Dispose();
             throw new Exception("Unable to initialize GDI+");
         }
     }
@@ -1410,8 +1728,9 @@ namespace Studio.Softer.Windows
 
     #region Native Types
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct BLENDFUNCTION
+    public struct BLENDFUNCTION
     {
         // Must be AC_SRC_OVER
         public AC BlendOp;
@@ -1423,8 +1742,9 @@ namespace Studio.Softer.Windows
         public AC AlphaFormat;
     }
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct HIGHCONTRAST 
+    public struct HIGHCONTRAST
     {
         public int cbSize;
         public HCF dwFlags;
@@ -1433,8 +1753,9 @@ namespace Studio.Softer.Windows
         public IntPtr lpszDefaultScheme;
     }
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct RGBQUAD
+    public struct RGBQUAD
     {
         public byte rgbBlue;
         public byte rgbGreen;
@@ -1442,10 +1763,28 @@ namespace Studio.Softer.Windows
         public byte rgbReserved;
     }
 
+    
+    [StructLayout(LayoutKind.Sequential, Pack=2)]
+    public struct BITMAPINFOHEADER 
+    { 
+        public int biSize;
+        public int biWidth;
+        public int biHeight;
+        public short biPlanes;
+        public short biBitCount;
+        public BI biCompression;
+        public int biSizeImage;
+        public int biXPelsPerMeter;
+        public int biYPelsPerMeter;
+        public int biClrUsed;
+        public int biClrImportant;
+    }
+
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct BITMAPINFO
-    {
-        public BITMAPINFOHEADER bmiHeader;
+    public struct BITMAPINFO
+    { 
+        public BITMAPINFOHEADER bmiHeader; 
         public RGBQUAD bmiColors;
     }
 
@@ -1457,7 +1796,7 @@ namespace Studio.Softer.Windows
         public MSGFLTINFO ExtStatus;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
     internal struct CREATESTRUCT
     {
         public IntPtr lpCreateParams;
@@ -1469,15 +1808,14 @@ namespace Studio.Softer.Windows
         public int y;
         public int x;
         public WS style;
-        [MarshalAs(UnmanagedType.LPWStr)]
-        public string lpszName;
-        [MarshalAs(UnmanagedType.LPWStr)]
-        public string lpszClass;
+        [MarshalAs(UnmanagedType.LPWStr)] public string lpszName;
+        [MarshalAs(UnmanagedType.LPWStr)] public string lpszClass;
         public WS_EX dwExStyle;
     }
 
+    
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Pack = 1)]
-    internal struct SHFILEOPSTRUCT
+    public struct SHFILEOPSTRUCT
     {
         public IntPtr hwnd;
         [MarshalAs(UnmanagedType.U4)]
@@ -1526,9 +1864,10 @@ namespace Studio.Softer.Windows
         public RECT rgrect_CloseButton;
     }
 
+    
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     [StructLayout(LayoutKind.Sequential)]
-    internal class NOTIFYICONDATA
+    public class NOTIFYICONDATA
     {
         public int cbSize;
         public IntPtr hWnd;
@@ -1645,9 +1984,10 @@ namespace Studio.Softer.Windows
         #endregion
     }
 
+    
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal class SHARDAPPIDINFO
+    public class SHARDAPPIDINFO
     {
         [MarshalAs(UnmanagedType.Interface)]
         object psi;    // The namespace location of the the item that should be added to the recent docs folder.
@@ -1655,9 +1995,10 @@ namespace Studio.Softer.Windows
         string pszAppID;  // The id of the application that should be associated with this recent doc.
     }
 
+    
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    internal class SHARDAPPIDINFOIDLIST
+    public class SHARDAPPIDINFOIDLIST
     {
         /// <summary>The idlist for the shell item that should be added to the recent docs folder.</summary>
         IntPtr pidl;
@@ -1677,9 +2018,9 @@ namespace Studio.Softer.Windows
         string pszAppID;  // The id of the application that should be associated with this recent doc.
     }
 
-
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct LOGFONT
+    
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+    public struct LOGFONT
     {
         public int lfHeight;
         public int lfWidth;
@@ -1698,9 +2039,64 @@ namespace Studio.Softer.Windows
         public string lfFaceName;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct MINMAXINFO
+    {
+        public POINT ptReserved;
+        public POINT ptMaxSize;
+        public POINT ptMaxPosition;
+        public POINT ptMinTrackSize;
+        public POINT ptMaxTrackSize;
+    }
+
+    
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NONCLIENTMETRICS
+    {
+        public int cbSize;
+        public int iBorderWidth;
+        public int iScrollWidth;
+        public int iScrollHeight;
+        public int iCaptionWidth;
+        public int iCaptionHeight;
+        public LOGFONT lfCaptionFont;
+        public int iSmCaptionWidth;
+        public int iSmCaptionHeight;
+        public LOGFONT lfSmCaptionFont;
+        public int iMenuWidth;
+        public int iMenuHeight;
+        public LOGFONT lfMenuFont;
+        public LOGFONT lfStatusFont;
+        public LOGFONT lfMessageFont;
+        // Vista only
+        public int iPaddedBorderWidth;
+
+        public static NONCLIENTMETRICS VistaMetricsStruct
+        {
+            get
+            {
+                var ncm = new NONCLIENTMETRICS();
+                ncm.cbSize = Marshal.SizeOf(typeof(NONCLIENTMETRICS));
+                return ncm;
+            }
+        }
+
+        public static NONCLIENTMETRICS XPMetricsStruct
+        {
+            get
+            {
+                var ncm = new NONCLIENTMETRICS();
+                // Account for the missing iPaddedBorderWidth
+                ncm.cbSize = Marshal.SizeOf(typeof(NONCLIENTMETRICS)) - sizeof(int);
+                return ncm;
+            }
+        }
+    }
+
     /// <summary>Defines options that are used to set window visual style attributes.</summary>
+    
     [StructLayout(LayoutKind.Explicit)]
-    internal struct WTA_OPTIONS
+    public struct WTA_OPTIONS
     {
         // public static readonly uint Size = (uint)Marshal.SizeOf(typeof(WTA_OPTIONS));
         public const uint Size = 8;
@@ -1723,12 +2119,227 @@ namespace Studio.Softer.Windows
         public WTNCA dwMask;
     }
 
+    
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MARGINS
+    {
+        /// <summary>Width of left border that retains its size.</summary>
+        public int cxLeftWidth;
+        /// <summary>Width of right border that retains its size.</summary>
+        public int cxRightWidth;
+        /// <summary>Height of top border that retains its size.</summary>
+        public int cyTopHeight;
+        /// <summary>Height of bottom border that retains its size.</summary>
+        public int cyBottomHeight;
+    };
+
+    
+    [Serializable]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct POINT
+    {
+        private int _x;
+        private int _y;
+
+        public POINT(int x, int y)
+        {
+            _x = x;
+            _y = y;
+        }
+
+        public int X
+        {
+            get { return _x; }
+            set { _x = value; }
+        }
+
+        public int Y
+        {
+            get { return _y; }
+            set { _y = value; }
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is POINT)
+            {
+                var point = (POINT)obj;
+
+                return point._x == _x && point._y == _y;
+            }
+            return base.Equals(obj);
+        }
+        public override int GetHashCode()
+        {
+            return _x.GetHashCode() ^ _y.GetHashCode();
+        }
+
+        public static bool operator ==(POINT a, POINT b)
+        {
+            return a._x == b._x && a._y == b._y;
+        }
+
+        public static bool operator !=(POINT a, POINT b)
+        {
+            return !(a == b);
+        }
+    }
+
+    
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     [StructLayout(LayoutKind.Sequential)]
-    internal class RefPOINT
+    public class RefPOINT
     {
         public int x;
         public int y;
+    }
+
+    
+    [StructLayout(LayoutKind.Sequential, Pack = 0)]
+    public struct RECT
+    {
+        private int _left;
+        private int _top;
+        private int _right;
+        private int _bottom;
+
+        public static readonly RECT Empty = new RECT();
+
+        public RECT(int left, int top, int right, int bottom)
+        {
+            this._left = left;
+            this._top = top;
+            this._right = right;
+            this._bottom = bottom;
+        }
+
+        public RECT(RECT rcSrc)
+        {
+            _left = rcSrc.Left;
+            _top = rcSrc.Top;
+            _right = rcSrc.Right;
+            _bottom = rcSrc.Bottom;
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public void Offset(int dx, int dy)
+        {
+            _left += dx;
+            _top += dy;
+            _right += dx;
+            _bottom += dy;
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public int Left
+        {
+            get { return _left; }
+            set { _left = value; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public int Right
+        {
+            get { return _right; }
+            set { _right = value; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public int Top
+        {
+            get { return _top; }
+            set { _top = value; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public int Bottom
+        {
+            get { return _bottom; }
+            set { _bottom = value; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public int Width
+        {
+            get { return _right - _left; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public int Height
+        {
+            get { return _bottom - _top; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public POINT Position
+        {
+            get { return new POINT { X = _left, Y = _top }; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public SIZE Size
+        {
+            get { return new SIZE { cx = Width, cy = Height }; }
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static RECT Union(RECT rect1, RECT rect2)
+        {
+            return new RECT
+            {
+                Left = Math.Min(rect1.Left, rect2.Left),
+                Top = Math.Min(rect1.Top, rect2.Top),
+                Right = Math.Max(rect1.Right, rect2.Right),
+                Bottom = Math.Max(rect1.Bottom, rect2.Bottom),
+            };
+        }
+
+        public override bool Equals(object obj)
+        {
+            try
+            {
+                var rc = (RECT)obj;
+                return rc._bottom == _bottom
+                    && rc._left == _left
+                    && rc._right == _right
+                    && rc._top == _top;
+            }
+            catch (InvalidCastException)
+            {
+                return false;
+            }
+        }
+
+        public bool IsEmpty
+        {
+            get
+            {
+                // BUGBUG : On Bidi OS (hebrew arabic) left > right
+                return Left >= Right || Top >= Bottom;
+            }
+        }
+
+        public override string ToString()
+        {
+            if (this == Empty)
+                return "RECT {Empty}";
+            return "RECT { left : " + Left + " / top : " + Top + " / right : " + Right + " / bottom : " + Bottom + " }";
+        }
+
+        public override int GetHashCode()
+        {
+            return (_left << 16 | Utility.LOWORD(_right)) ^ (_top << 16 | Utility.LOWORD(_bottom));
+        }
+
+        public static bool operator ==(RECT rect1, RECT rect2)
+        {
+            return (rect1.Left == rect2.Left && rect1.Top == rect2.Top && rect1.Right == rect2.Right && rect1.Bottom == rect2.Bottom);
+        }
+
+        public static bool operator !=(RECT rect1, RECT rect2)
+        {
+            return !(rect1 == rect2);
+        }
     }
 
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
@@ -1799,22 +2410,25 @@ namespace Studio.Softer.Windows
         }
     }
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct SIZE
+    public struct SIZE
     {
         public int cx;
         public int cy;
     }
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct StartupOutput
+    public struct StartupOutput
     {
         public IntPtr hook;
         public IntPtr unhook;
     }
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal class StartupInput
+    public class StartupInput
     {
         public int GdiplusVersion = 1;
         public IntPtr DebugEventCallback;
@@ -1822,10 +2436,11 @@ namespace Studio.Softer.Windows
         public bool SuppressExternalCodecs;
     }
 
+    
     [SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses")]
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     [BestFitMapping(false)]
-    internal class WIN32_FIND_DATAW
+    public class WIN32_FIND_DATAW
     {
         public FileAttributes dwFileAttributes;
         public System.Runtime.InteropServices.ComTypes.FILETIME ftCreationTime;
@@ -1841,8 +2456,77 @@ namespace Studio.Softer.Windows
         public string cAlternateFileName;
     }
 
+    
+    [Serializable]
     [StructLayout(LayoutKind.Sequential)]
-    internal struct MOUSEINPUT
+    public class WINDOWPLACEMENT
+    {
+        public int length = Marshal.SizeOf(typeof(WINDOWPLACEMENT));
+        public int flags;
+        public SW showCmd;
+        public POINT minPosition;
+        public POINT maxPosition;
+        public RECT normalPosition;
+    }
+
+    
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WINDOWPOS
+    {
+        public IntPtr hwnd;
+        public IntPtr hwndInsertAfter;
+        public int x;
+        public int y;
+        public int cx;
+        public int cy;
+        public SWP flags;
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return $"x: {this.x}; y: {this.y}; cx: {this.cx}; cy: {this.cy}; flags: {this.flags}";
+        }
+    }
+
+    
+    [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
+    public struct WNDCLASSEX
+    {
+        public int cbSize;
+        public CS style;
+        public WndProc lpfnWndProc;
+        public int cbClsExtra;
+        public int cbWndExtra;
+        public IntPtr hInstance;
+        public IntPtr hIcon;
+        public IntPtr hCursor;
+        public IntPtr hbrBackground;
+        [MarshalAs(UnmanagedType.LPWStr)]
+        public string lpszMenuName;
+        [MarshalAs(UnmanagedType.LPWStr)]
+        public string lpszClassName;
+        public IntPtr hIconSm;
+    }
+
+    
+    [StructLayout(LayoutKind.Sequential)]
+    public struct WINDOWINFO
+    {
+        public int cbSize;
+        public RECT rcWindow;
+        public RECT rcClient;
+        public int dwStyle;
+        public int dwExStyle;
+        public uint dwWindowStatus;
+        public uint cxWindowBorders;
+        public uint cyWindowBorders;
+        public ushort atomWindowType;
+        public ushort wCreatorVersion;
+    }
+
+    
+    [StructLayout(LayoutKind.Sequential)]
+    public struct MOUSEINPUT
     {
         public int dx;
         public int dy;
@@ -1852,22 +2536,25 @@ namespace Studio.Softer.Windows
         public IntPtr dwExtraInfo;
     }
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct INPUT
+    public struct INPUT
     {
         public uint type;
         public MOUSEINPUT mi;
     };
 
+    
     [StructLayout(LayoutKind.Sequential)]
-    internal struct UNSIGNED_RATIO
+    public struct UNSIGNED_RATIO
     {
         public uint uiNumerator;
         public uint uiDenominator;
     }
 
-    [StructLayout(LayoutKind.Sequential, Pack=1)]
-    internal struct DWM_TIMING_INFO
+    
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct DWM_TIMING_INFO
     {
         public int cbSize;
         public UNSIGNED_RATIO rateRefresh;
@@ -1911,27 +2598,114 @@ namespace Studio.Softer.Windows
         public ulong cBuffersEmpty;
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    internal struct SHDRAGIMAGE
+    {
+        public SIZE sizeDragImage;
+        public POINT ptOffset;
+        public IntPtr hbmpDragImage;
+        public int crColorKey;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode, Size = 1044)]
+    internal struct DROPDESCRIPTION
+    {
+        public DROPIMAGETYPE type;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szMessage;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szInsert;
+    }
+
+    
+    [StructLayout(LayoutKind.Sequential)]
+    public struct APPBARDATA
+    {
+        /// <summary>
+        /// initialize this field using: Marshal.SizeOf(typeof(APPBARDATA));
+        /// </summary>
+        public int cbSize;
+        public IntPtr hWnd;
+        public int uCallbackMessage;
+        public int uEdge;
+        public RECT rc;
+        public bool lParam;
+    }
+
     #endregion
 
-    #region Native Functions
+    #region Interfaces
+
+    [
+        ComImport,
+        InterfaceType(ComInterfaceType.InterfaceIsIUnknown),
+        Guid(IID.ServiceProvider)
+    ]
+    internal interface IServiceProvider
+    {
+        [return: MarshalAs(UnmanagedType.IUnknown)]
+        object QueryService(ref Guid guidService, ref Guid riid);
+    }
+
+    [
+        ComImport,
+        Guid(IID.DragSourceHelper),
+        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
+    ]
+    internal interface IDragSourceHelper
+    {
+        void InitializeFromBitmap([In] ref SHDRAGIMAGE pshdi, [In] IDataObject pDataObject);
+        void InitializeFromWindow(IntPtr hwnd, [In] ref POINT ppt, [In] IDataObject pDataObject);
+    }
+
+    [
+        ComImport,
+        Guid(IID.DragSourceHelper2),
+        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
+    ]
+    internal interface IDragSourceHelper2 : IDragSourceHelper
+    {
+        #region IDragSourceHelper redeclaration
+        new void InitializeFromBitmap([In] ref SHDRAGIMAGE pshdi, [In] IDataObject pDataObject);
+        new void InitializeFromWindow(IntPtr hwnd, [In] ref POINT ppt, [In] IDataObject pDataObject);
+        #endregion
+
+        void SetFlags(DSH dwFlags);
+    }
+
+    [
+        ComImport,
+        Guid(IID.DropTargetHelper),
+        InterfaceType(ComInterfaceType.InterfaceIsIUnknown)
+    ]
+    internal interface IDropTargetHelper
+    {
+        void DragEnter(IntPtr hwndTarget, IDataObject pDataObject, ref POINT ppt, int effect);
+        void DragLeave();
+        void DragOver(ref POINT ppt, int effect);
+        void Drop(IDataObject dataObject, ref POINT ppt, int effect);
+        void Show([MarshalAs(UnmanagedType.Bool)] bool fShow);
+    }
+
+    #endregion
 
     /// <summary>Delegate declaration that matches native WndProc signatures.</summary>
-    internal delegate IntPtr WndProc(IntPtr hwnd, WM uMsg, IntPtr wParam, IntPtr lParam);
-
-    /// <summary>Delegate declaration that matches native WndProc signatures.</summary>
-    internal delegate IntPtr WndProcHook(IntPtr hwnd, WM uMsg, IntPtr wParam, IntPtr lParam, ref bool handled);
+    
+    public delegate IntPtr WndProc(IntPtr hwnd, WM uMsg, IntPtr wParam, IntPtr lParam);
 
     /// <summary>Delegate declaration that matches managed WndProc signatures.</summary>
     internal delegate IntPtr MessageHandler(WM uMsg, IntPtr wParam, IntPtr lParam, out bool handled);
 
     // Some native methods are shimmed through public versions that handle converting failures into thrown exceptions.
-    internal static class NativeMethods
+    
+    public static class NativeMethods
     {
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "AdjustWindowRectEx", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool _AdjustWindowRectEx(ref RECT lpRect, WS dwStyle, [MarshalAs(UnmanagedType.Bool)] bool bMenu, WS_EX dwExStyle);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static RECT AdjustWindowRectEx(RECT lpRect, WS dwStyle, bool bMenu, WS_EX dwExStyle)
         {
             // Native version modifies the parameter in place.
@@ -1941,6 +2715,27 @@ namespace Studio.Softer.Windows
             }
 
             return lpRect;
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", EntryPoint = "AllowSetForegroundWindow", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool _AllowSetForegroundWindow(int dwProcessId);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void AllowSetForegroundWindow()
+        {
+            int ASFW_ANY = -1;
+            AllowSetForegroundWindow(ASFW_ANY);
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void AllowSetForegroundWindow(int dwProcessId)
+        {
+            if (!_AllowSetForegroundWindow(dwProcessId))
+            {
+                HRESULT.ThrowLastError();
+            }
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -1995,9 +2790,17 @@ namespace Studio.Softer.Windows
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", CharSet = CharSet.None, SetLastError = true, EntryPoint = "ClientToScreen")]
+        public static extern bool ClientToScreen(IntPtr hWnd, ref POINT point);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", CharSet = CharSet.None, SetLastError = true, EntryPoint = "ScreenToClient")]
+        public static extern bool ScreenToClient(IntPtr hWnd, ref POINT point);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("gdi32.dll")]
         public static extern CombineRgnResult CombineRgn(IntPtr hrgnDest, IntPtr hrgnSrc1, IntPtr hrgnSrc2, RGN fnCombineMode);
-        
+
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("shell32.dll", EntryPoint = "CommandLineToArgvW", CharSet = CharSet.Unicode)]
         private static extern IntPtr _CommandLineToArgvW([MarshalAs(UnmanagedType.LPWStr)] string cmdLine, out int numArgs);
@@ -2182,14 +2985,10 @@ namespace Studio.Softer.Windows
         public static extern void DwmExtendFrameIntoClientArea(IntPtr hwnd, ref MARGINS pMarInset);
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        [DllImport("dwmapi.dll", EntryPoint = "DwmIsCompositionEnabled", PreserveSig = false)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool _DwmIsCompositionEnabled();
-
-        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("dwmapi.dll", EntryPoint = "DwmGetColorizationColor", PreserveSig = true)]
         private static extern HRESULT _DwmGetColorizationColor(out uint pcrColorization, [Out, MarshalAs(UnmanagedType.Bool)] out bool pfOpaqueBlend);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool DwmGetColorizationColor(out uint pcrColorization, out bool pfOpaqueBlend)
         {
             // Make this call safe to make on downlevel OSes...
@@ -2210,6 +3009,38 @@ namespace Studio.Softer.Windows
 
             return false;
         }
+
+        //#define DWM_SIT_DISPLAYFRAME    0x00000001  // Display a window frame around the provided bitmap
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("dwmapi.dll", EntryPoint = "DwmGetCompositionTimingInfo")]
+        private static extern HRESULT _DwmGetCompositionTimingInfo(IntPtr hwnd, ref DWM_TIMING_INFO pTimingInfo);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static DWM_TIMING_INFO? DwmGetCompositionTimingInfo(IntPtr hwnd)
+        {
+            if (!Utility.IsOSVistaOrNewer)
+            {
+                // API was new to Vista.
+                return null;
+            }
+
+            var dti = new DWM_TIMING_INFO { cbSize = Marshal.SizeOf(typeof(DWM_TIMING_INFO)) };
+            HRESULT hr = _DwmGetCompositionTimingInfo(hwnd, ref dti);
+            if (hr == HRESULT.E_PENDING)
+            {
+                // The system isn't yet ready to respond.  Return null rather than throw.
+                return null;
+            }
+            hr.ThrowIfFailed();
+
+            return dti;
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("dwmapi.dll", EntryPoint = "DwmIsCompositionEnabled", PreserveSig = false)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool _DwmIsCompositionEnabled();
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static bool DwmIsCompositionEnabled()
@@ -2236,7 +3067,7 @@ namespace Studio.Softer.Windows
         {
             Assert.IsTrue(Utility.IsOSVistaOrNewer);
             var dwPolicy = (int)flip3dPolicy;
-            _DwmSetWindowAttribute(hwnd, DWMWA.FLIP3D_POLICY, ref dwPolicy, sizeof(int));
+            _DwmSetWindowAttribute(hwnd, DWMWA.FLIP3D_POLICY, ref dwPolicy, sizeof(int)); 
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -2320,7 +3151,78 @@ namespace Studio.Softer.Windows
             return rc;
         }
 
-        [DllImport("uxtheme.dll", EntryPoint="GetCurrentThemeName", CharSet = CharSet.Unicode)]
+        [SecurityCritical]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", EntryPoint = "GetCursorPos", ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool _GetCursorPos(out POINT lpPoint);
+
+        [SecurityCritical]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static POINT GetCursorPos()
+        {
+            POINT pt;
+            if (!_GetCursorPos(out pt))
+            {
+                HRESULT.ThrowLastError();
+            }
+            return pt;
+        }
+
+        [SecurityCritical]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool TryGetCursorPos(out POINT pt)
+        {
+            var returnValue = _GetCursorPos(out pt);
+            // Sometimes Win32 will fail this call, such as if you are
+            // not running in the interactive desktop. For example,
+            // a secure screen saver may be running.
+            if (!returnValue)
+            {
+                System.Diagnostics.Debug.WriteLine("GetCursorPos failed!");
+                pt.X = 0;
+                pt.Y = 0;
+            }
+            return returnValue;
+        }
+
+        [SecurityCritical]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", EntryPoint = "GetPhysicalCursorPos", ExactSpelling = true, CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool _GetPhysicalCursorPos(out POINT lpPoint);
+
+        [SecurityCritical]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static POINT GetPhysicalCursorPos()
+        {
+            POINT pt;
+            if (!_GetPhysicalCursorPos(out pt))
+            {
+                HRESULT.ThrowLastError();
+            }
+            return pt;
+        }
+
+        [SecurityCritical]
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static bool TryGetPhysicalCursorPos(out POINT pt)
+        {
+            var returnValue = _GetPhysicalCursorPos(out pt);
+            // Sometimes Win32 will fail this call, such as if you are
+            // not running in the interactive desktop. For example,
+            // a secure screen saver may be running.
+            if (!returnValue)
+            {
+                System.Diagnostics.Debug.WriteLine("GetPhysicalCursorPos failed!");
+                pt.X = 0;
+                pt.Y = 0;
+            }
+            return returnValue;
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("uxtheme.dll", EntryPoint = "GetCurrentThemeName", CharSet = CharSet.Unicode)]
         private static extern HRESULT _GetCurrentThemeName(
             StringBuilder pszThemeFileName,
             int dwMaxNameChars,
@@ -2329,6 +3231,7 @@ namespace Studio.Softer.Windows
             StringBuilder pszSizeBuff,
             int cchMaxSizeChars);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void GetCurrentThemeName(out string themeFileName, out string color, out string size)
         {
             // Not expecting strings longer than MAX_PATH.  We will return the error 
@@ -2347,6 +3250,7 @@ namespace Studio.Softer.Windows
             size = sizeBuilder.ToString();
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("uxtheme.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsThemeActive();
@@ -2388,9 +3292,11 @@ namespace Studio.Softer.Windows
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("kernel32.dll", EntryPoint = "GetModuleHandleW", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern IntPtr _GetModuleHandle([MarshalAs(UnmanagedType.LPWStr)] string lpModuleName);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr GetModuleHandle(string lpModuleName)
         {
             IntPtr retPtr = _GetModuleHandle(lpModuleName);
@@ -2417,9 +3323,47 @@ namespace Studio.Softer.Windows
             return mi;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", EntryPoint = "GetMonitorInfoW", SetLastError = true, ExactSpelling = true, CharSet = CharSet.Unicode)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool _GetMonitorInfoW([In] IntPtr hMonitor, [Out] MONITORINFO lpmi);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static MONITORINFO GetMonitorInfoW(IntPtr hMonitor)
+        {
+            var mi = new MONITORINFO();
+            if (!_GetMonitorInfoW(hMonitor, mi))
+            {
+                throw new Win32Exception();
+            }
+            return mi;
+        }
+
+        public static IntPtr GetTaskBarHandleForMonitor(IntPtr monitor)
+        {
+            // maybe we can use ReBarWindow32 isntead Shell_TrayWnd
+            var hwnd = NativeMethods.FindWindow("Shell_TrayWnd", null);
+            var monitorWithTaskbarOnIt = NativeMethods.MonitorFromWindow(hwnd, MonitorOptions.MONITOR_DEFAULTTONEAREST);
+
+            if (!Equals(monitor, monitorWithTaskbarOnIt))
+            {
+                hwnd = NativeMethods.FindWindow("Shell_SecondaryTrayWnd", null);
+                monitorWithTaskbarOnIt = NativeMethods.MonitorFromWindow(hwnd, MonitorOptions.MONITOR_DEFAULTTONEAREST);
+
+                if (!Equals(monitor, monitorWithTaskbarOnIt))
+                {
+                    return IntPtr.Zero;
+                }
+            }
+
+            return hwnd;
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("gdi32.dll", EntryPoint = "GetStockObject", SetLastError = true)]
         private static extern IntPtr _GetStockObject(StockObject fnObject);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr GetStockObject(StockObject fnObject)
         {
             IntPtr retPtr = _GetStockObject(fnObject);
@@ -2438,6 +3382,43 @@ namespace Studio.Softer.Windows
         [DllImport("user32.dll")]
         public static extern int GetSystemMetrics(SM nIndex);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", CharSet = CharSet.None, SetLastError = true, EntryPoint = "GetWindowInfo")]
+        private static extern bool _GetWindowInfo(IntPtr hWnd, ref WINDOWINFO pwi);
+
+        public static WINDOWINFO GetWindowInfo(IntPtr hWnd)
+        {
+            WINDOWINFO info = new WINDOWINFO()
+            {
+                 cbSize = Marshal.SizeOf(typeof(WINDOWINFO))
+            };
+            if (!_GetWindowInfo(hWnd, ref info))
+            {
+                HRESULT.ThrowLastError();
+            }
+            return info;
+        }
+
+        public static WS GetWindowStyle(IntPtr hWnd)
+        {
+            return (WS)GetWindowLongPtr(hWnd, GWL.STYLE);
+        }
+
+        public static WS_EX GetWindowStyleEx(IntPtr hWnd)
+        {
+            return (WS_EX)GetWindowLongPtr(hWnd, GWL.EXSTYLE);
+        }
+
+        public static WS SetWindowStyle(IntPtr hWnd, WS dwNewLong)
+        {
+            return (WS)SetWindowLongPtr(hWnd, GWL.STYLE, (IntPtr)(int)dwNewLong);
+        }
+
+        public static WS_EX SetWindowStyleEx(IntPtr hWnd, WS_EX dwNewLong)
+        {
+            return (WS_EX)SetWindowLongPtr(hWnd, GWL.EXSTYLE, (IntPtr)(int)dwNewLong);
+        }
+
         // This is aliased as a macro in 32bit Windows.
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static IntPtr GetWindowLongPtr(IntPtr hwnd, GWL nIndex)
@@ -2449,13 +3430,44 @@ namespace Studio.Softer.Windows
             }
             else
             {
-                ret = new IntPtr(GetWindowLongPtr32(hwnd, nIndex));
+                ret = GetWindowLongPtr32(hwnd, nIndex);
             }
             if (IntPtr.Zero == ret)
             {
                 throw new Win32Exception();
             }
             return ret;
+        }
+
+        public static IntPtr GetClassLong(IntPtr hWnd, int nIndex)
+        {
+            if (IntPtr.Size == 4)
+            {
+                return new IntPtr(GetClassLong32(hWnd, nIndex));
+            }
+
+            return GetClassLong64(hWnd, nIndex);
+        }
+
+        [DllImport("user32.dll", EntryPoint = "GetClassLong")]
+        private static extern uint GetClassLong32(IntPtr hWnd, int nIndex);
+
+        [DllImport("user32.dll", EntryPoint = "GetClassLongPtr")]
+        [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
+        private static extern IntPtr GetClassLong64(IntPtr hWnd, int nIndex);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", EntryPoint="SetProp", CharSet=CharSet.Unicode, SetLastError=true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool _SetProp(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)] string lpString, IntPtr hData);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void SetProp(IntPtr hwnd, string lpString, IntPtr hData)
+        {
+            if (!_SetProp(hwnd, lpString, hData))
+            {
+                HRESULT.ThrowLastError();
+            }
         }
 
         /// <summary>
@@ -2484,17 +3496,27 @@ namespace Studio.Softer.Windows
         [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "GetWindowLong", SetLastError = true)]
-        private static extern int GetWindowLongPtr32(IntPtr hWnd, GWL nIndex);
+        private static extern IntPtr GetWindowLongPtr32(IntPtr hWnd, GWL nIndex);
 
         [SuppressMessage("Microsoft.Interoperability", "CA1400:PInvokeEntryPointsShouldExist")]
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "GetWindowLongPtr", SetLastError = true)]
         private static extern IntPtr GetWindowLongPtr64(IntPtr hWnd, GWL nIndex);
 
+        /// <summary>
+        /// Retrieves the show state and the restored, minimized, and maximized positions of the specified window.
+        /// </summary>
+        /// <param name="hwnd">A handle to the window.</param>
+        /// <param name="lpwndpl">A pointer to the WINDOWPLACEMENT structure that receives the show state and position information.</param>
+        /// <remarks>
+        /// Before calling GetWindowPlacement, set the length member to sizeof(WINDOWPLACEMENT).
+        /// GetWindowPlacement fails if lpwndpl-> length is not set correctly.
+        /// </remarks>
+        /// <returns>If the function succeeds, the return value is nonzero. If the function fails, the return value is zero.</returns>
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetWindowPlacement(IntPtr hwnd, WINDOWPLACEMENT lpwndpl);
+        private static extern bool GetWindowPlacement(IntPtr hwnd, [In, Out] WINDOWPLACEMENT lpwndpl);
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static WINDOWPLACEMENT GetWindowPlacement(IntPtr hwnd)
@@ -2507,11 +3529,27 @@ namespace Studio.Softer.Windows
             throw new Win32Exception();
         }
 
+        /// <summary>
+        /// Sets the show state and the restored, minimized, and maximized positions of the specified window.
+        /// </summary>
+        /// <param name="hWnd">A handle to the window.</param>
+        /// <param name="lpwndpl">A pointer to a WINDOWPLACEMENT structure that specifies the new show state and window positions.</param>
+        /// <remarks>
+        /// Before calling SetWindowPlacement, set the length member of the WINDOWPLACEMENT structure to sizeof(WINDOWPLACEMENT).
+        /// SetWindowPlacement fails if the length member is not set correctly.
+        /// </remarks>
+        /// <returns>If the function succeeds, the return value is nonzero. If the function fails, the return value is zero.</returns>
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool SetWindowPlacement(IntPtr hWnd, [In] WINDOWPLACEMENT lpwndpl);
+
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "GetWindowRect", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool _GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static RECT GetWindowRect(IntPtr hwnd)
         {
             RECT rc;
@@ -2553,6 +3591,11 @@ namespace Studio.Softer.Windows
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool IsZoomed(IntPtr hwnd);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool IsWindowVisible(IntPtr hwnd);
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
@@ -2561,7 +3604,117 @@ namespace Studio.Softer.Windows
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll")]
-        public static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+        public static extern IntPtr MonitorFromWindow(IntPtr hwnd, MonitorOptions dwFlags);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll")]
+        public static extern IntPtr MonitorFromPoint(POINT pt, MonitorOptions dwFlags);
+
+        /// <summary>
+        /// The MonitorFromRect function retrieves a handle to the display monitor that 
+        /// has the largest area of intersection with a specified rectangle.
+        /// </summary>
+        /// <param name="lprc">Pointer to a RECT structure that specifies the rectangle of interest in 
+        /// virtual-screen coordinates</param>
+        /// <param name="dwFlags">Determines the function's return value if the rectangle does not intersect 
+        /// any display monitor</param>
+        /// <returns>
+        /// If the rectangle intersects one or more display monitor rectangles, the return value 
+        /// is an HMONITOR handle to the display monitor that has the largest area of intersection with the rectangle.
+        /// If the rectangle does not intersect a display monitor, the return value depends on the value of dwFlags.
+        /// </returns>
+        [DllImport("user32.dll")]
+        public static extern IntPtr MonitorFromRect([In] ref RECT lprc, MonitorOptions dwFlags);
+
+        /// <summary>
+        /// Loads an icon, cursor, animated cursor, or bitmap.
+        /// </summary>
+        /// <param name="hinst">Handle to the module of either a DLL or executable (.exe) that contains the image to be loaded</param>
+        /// <param name="lpszName">Specifies the image to load</param>
+        /// <param name="uType">Specifies the type of image to be loaded. </param>
+        /// <param name="cxDesired">Specifies the width, in pixels, of the icon or cursor</param>
+        /// <param name="cyDesired">Specifies the height, in pixels, of the icon or cursor</param>
+        /// <param name="fuLoad">This parameter can be one or more of the following values.</param>
+        /// <returns>If the function succeeds, the return value is the requested value.If the function fails, the return value is zero. To get extended error information, call GetLastError. </returns>
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr LoadImage(IntPtr hinst, IntPtr lpszName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetFocus();
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetFocus(IntPtr hWnd);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        public static extern int ToUnicode(uint virtualKey, uint scanCode, byte[] keyStates, [MarshalAs(UnmanagedType.LPArray)] [Out] char[] chars, int charMaxCount, uint flags);
+
+        [DllImport("user32.dll")]
+        public static extern bool GetKeyboardState(byte[] lpKeyState);
+
+        [DllImport("user32.dll")]
+        public static extern uint MapVirtualKey(uint uCode, MapType uMapType);
+
+        // ReSharper disable InconsistentNaming
+        public enum MapType : uint
+        {
+            MAPVK_VK_TO_VSC = 0x0,
+            MAPVK_VSC_TO_VK = 0x1,
+            MAPVK_VK_TO_CHAR = 0x2,
+            MAPVK_VSC_TO_VK_EX = 0x3,
+        }
+
+        /// <summary>
+        /// Creates a Color dialog box that enables the user to select a color.
+        /// </summary>
+        /// <param name="lpcc">A pointer to a CHOOSECOLOR structure that contains information used to initialize the dialog box. When ChooseColor returns, this structure contains information about the user's color selection.</param>
+        /// <returns>If the user clicks the OK button of the dialog box, the return value is nonzero. The rgbResult member of the CHOOSECOLOR structure contains the RGB color value of the color selected by the user.If the user cancels or closes the Color dialog box or an error occurs, the return value is zero. </returns>
+        [DllImport("comdlg32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ChooseColor(CHOOSECOLOR lpcc);
+
+        /// <summary>
+        /// Contains information the ChooseColor function uses to initialize the Color dialog box. After the user closes the dialog box, the system returns information about the user's selection in this structure. 
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public class CHOOSECOLOR
+        {
+            /// <summary>
+            /// The length, in bytes, of the structure. 
+            /// </summary>
+            public int lStructSize = Marshal.SizeOf(typeof(CHOOSECOLOR));
+            /// <summary>
+            /// A handle to the window that owns the dialog box. This member can be any valid window handle, or it can be NULL if the dialog box has no owner. 
+            /// </summary>
+            public IntPtr hwndOwner;
+            /// <summary>
+            /// If the CC_ENABLETEMPLATEHANDLE flag is set in the Flags member, hInstance is a handle to a memory object containing a dialog box template. If the CC_ENABLETEMPLATE flag is set, hInstance is a handle to a module that contains a dialog box template named by the lpTemplateName member. If neither CC_ENABLETEMPLATEHANDLE nor CC_ENABLETEMPLATE is set, this member is ignored. 
+            /// </summary>
+            public IntPtr hInstance = IntPtr.Zero;
+            /// <summary>
+            /// If the CC_RGBINIT flag is set, rgbResult specifies the color initially selected when the dialog box is created. If the specified color value is not among the available colors, the system selects the nearest solid color available. If rgbResult is zero or CC_RGBINIT is not set, the initially selected color is black. If the user clicks the OK button, rgbResult specifies the user's color selection. To create a COLORREF color value, use the RGB macro. 
+            /// </summary>
+            public int rgbResult;
+            /// <summary>
+            /// A pointer to an array of 16 values that contain red, green, blue (RGB) values for the custom color boxes in the dialog box. If the user modifies these colors, the system updates the array with the new RGB values. To preserve new custom colors between calls to the ChooseColor function, you should allocate static memory for the array. To create a COLORREF color value, use the RGB macro. 
+            /// </summary>
+            public IntPtr lpCustColors = IntPtr.Zero;
+            /// <summary>
+            /// A set of bit flags that you can use to initialize the Color dialog box. When the dialog box returns, it sets these flags to indicate the user's input. 
+            /// </summary>
+            public int Flags;
+            /// <summary>
+            /// Application-defined data that the system passes to the hook procedure identified by the lpfnHook member. When the system sends the WM_INITDIALOG message to the hook procedure, the message's lParam parameter is a pointer to the CHOOSECOLOR structure specified when the dialog was created. The hook procedure can use this pointer to get the lCustData value. 
+            /// </summary>
+            public IntPtr lCustData = IntPtr.Zero;
+            /// <summary>
+            /// A pointer to a CCHookProc hook procedure that can process messages intended for the dialog box. This member is ignored unless the CC_ENABLEHOOK flag is set in the Flags member. 
+            /// </summary>
+            public IntPtr lpfnHook = IntPtr.Zero;
+            /// <summary>
+            /// The name of the dialog box template resource in the module identified by the hInstance member. This template is substituted for the standard dialog box template. For numbered dialog box resources, lpTemplateName can be a value returned by the MAKEINTRESOURCE macro. This member is ignored unless the CC_ENABLETEMPLATE flag is set in the Flags member. 
+            /// </summary>
+            public IntPtr lpTemplateName = IntPtr.Zero;
+        }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "PostMessage", SetLastError = true)]
@@ -2708,24 +3861,17 @@ namespace Studio.Softer.Windows
         private static extern bool _SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, SWP uFlags);
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        public static bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, SWP uFlags)
+        public static void SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, SWP uFlags)
         {
             if (!_SetWindowPos(hWnd, hWndInsertAfter, x, y, cx, cy, uFlags))
             {
-                // If this fails it's never worth taking down the process.  Let the caller deal with the error if they want.
-                return false;
+                throw new Win32Exception();
             }
-
-            return true;
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("shell32.dll", SetLastError = false)]
         public static extern Win32Error SHFileOperation(ref SHFILEOPSTRUCT lpFileOp);
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool ShowWindow(IntPtr hwnd, SW nCmdShow);
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "SystemParametersInfoW", SetLastError = true)]
@@ -2768,6 +3914,7 @@ namespace Studio.Softer.Windows
             return metrics;
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         public static HIGHCONTRAST SystemParameterInfo_GetHIGHCONTRAST()
         {
@@ -2783,6 +3930,7 @@ namespace Studio.Softer.Windows
 
         // This function is strange in that it returns a BOOL if TPM_RETURNCMD isn't specified, but otherwise the command Id.
         // Currently it's only used with TPM_RETURNCMD, so making the signature match that.
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll")]
         public static extern uint TrackPopupMenuEx(IntPtr hmenu, uint fuFlags, int x, int y, IntPtr hwnd, IntPtr lptpm);
 
@@ -2821,8 +3969,14 @@ namespace Studio.Softer.Windows
         public static extern int SendInput(int nInputs, ref INPUT pInputs, int cbSize);
 
         // Depending on the message, callers may want to call GetLastError based on the return value.
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", SetLastError = true)]
         public static extern IntPtr SendMessage(IntPtr hWnd, WM Msg, IntPtr wParam, IntPtr lParam);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ShowWindow(IntPtr hwnd, SW nCmdShow);
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("user32.dll", EntryPoint = "UnregisterClass", SetLastError = true)]
@@ -2843,6 +3997,7 @@ namespace Studio.Softer.Windows
             }
         }
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         public static void UnregisterClass(string lpClassName, IntPtr hInstance)
         {
             if (!_UnregisterClassName(lpClassName, hInstance))
@@ -2855,11 +4010,11 @@ namespace Studio.Softer.Windows
         [DllImport("user32.dll", SetLastError = true, EntryPoint = "UpdateLayeredWindow")]
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool _UpdateLayeredWindow(
-            IntPtr hwnd,
-            SafeDC hdcDst,
-            [In] ref POINT pptDst,
-            [In] ref SIZE psize,
-            SafeDC hdcSrc,
+            IntPtr hwnd, 
+            SafeDC hdcDst, 
+            [In] ref POINT pptDst, 
+            [In] ref SIZE psize, 
+            SafeDC hdcSrc, 
             [In] ref POINT pptSrc,
             int crKey,
             ref BLENDFUNCTION pblend,
@@ -2910,54 +4065,45 @@ namespace Studio.Softer.Windows
             }
         }
 
-        #endregion
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", SetLastError = true, EntryPoint = "RegisterClipboardFormatW", CharSet = CharSet.Unicode)]
+        private static extern uint _RegisterClipboardFormat(string lpszFormatName);
 
-    #region Win7 declarations
-
-        [DllImport("shell32.dll", EntryPoint = "SHAddToRecentDocs")]
-        private static extern void _SHAddToRecentDocs_String(SHARD uFlags, [MarshalAs(UnmanagedType.LPWStr)] string pv);
-
-        // This overload is required.  There's a cast in the Shell code that causes the wrong vtbl to be used
-        // if we let the marshaller convert the parameter to an IUnknown.
-        [DllImport("shell32.dll", EntryPoint = "SHAddToRecentDocs")]
-        private static extern void _SHAddToRecentDocs_ShellLink(SHARD uFlags, IShellLinkW pv);
-
-        public static void SHAddToRecentDocs(string path)
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static uint RegisterClipboardFormat(string formatName)
         {
-            _SHAddToRecentDocs_String(SHARD.PATHW, path);
+            uint ret = _RegisterClipboardFormat(formatName);
+            if (ret == 0)
+            {
+                HRESULT.ThrowLastError();
+            }
+
+            return ret;
         }
 
-        // Win7 only.
-        public static void SHAddToRecentDocs(IShellLinkW shellLink)
-        {
-            _SHAddToRecentDocs_ShellLink(SHARD.LINK, shellLink);
-        }
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("ole32.dll")]
+        public static extern void ReleaseStgMedium(ref STGMEDIUM pmedium);
 
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("ole32.dll")]
+        public static extern HRESULT CreateStreamOnHGlobal(IntPtr hGlobal, [MarshalAs(UnmanagedType.Bool)] bool fDeleteOnRelease, out IStream ppstm);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("urlmon.dll")]
+        public static extern HRESULT CopyStgMedium(ref STGMEDIUM pcstgmedSrc, ref STGMEDIUM pstgmedDest);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("shell32.dll", CallingConvention = CallingConvention.StdCall)]
+        public static extern uint SHAppBarMessage(int dwMessage, ref APPBARDATA pData);
+
+        #region Win7 declarations
 
         //#define DWM_SIT_DISPLAYFRAME    0x00000001  // Display a window frame around the provided bitmap
-
-        [DllImport("dwmapi.dll", EntryPoint="DwmGetCompositionTimingInfo")]
-        private static extern HRESULT _DwmGetCompositionTimingInfo(IntPtr hwnd, ref DWM_TIMING_INFO pTimingInfo);
-
-        public static DWM_TIMING_INFO? DwmGetCompositionTimingInfo(IntPtr hwnd)
-        {
-            if (!Utility.IsOSVistaOrNewer)
-            {
-                // API was new to Vista.
-                return null;
-            }
-
-            var dti = new DWM_TIMING_INFO { cbSize = Marshal.SizeOf(typeof(DWM_TIMING_INFO)) };
-            HRESULT hr = _DwmGetCompositionTimingInfo(hwnd, ref dti);
-            if (hr == HRESULT.E_PENDING)
-            {
-                // The system isn't yet ready to respond.  Return null rather than throw.
-                return null;
-            }
-            hr.ThrowIfFailed();
-
-            return dti;
-        }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("dwmapi.dll", PreserveSig = false)]
@@ -2974,6 +4120,45 @@ namespace Studio.Softer.Windows
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("shell32.dll", PreserveSig = false)]
         public static extern void SHGetItemFromDataObject(IDataObject pdtobj, DOGIF dwFlags, [In] ref Guid riid, [Out, MarshalAs(UnmanagedType.Interface)] out object ppv);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("shell32.dll", PreserveSig = false, EntryPoint = "SHAddToRecentDocs")]
+        private static extern void _SHAddToRecentDocsObj(SHARD uFlags, object pv);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("shell32.dll", EntryPoint = "SHAddToRecentDocs")]
+        private static extern void _SHAddToRecentDocs_String(SHARD uFlags, [MarshalAs(UnmanagedType.LPWStr)] string pv);
+
+        // This overload is required.  There's a cast in the Shell code that causes the wrong vtbl to be used
+        // if we let the marshaller convert the parameter to an IUnknown.
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        [DllImport("shell32.dll", EntryPoint = "SHAddToRecentDocs")]
+        private static extern void _SHAddToRecentDocs_ShellLink(SHARD uFlags, IShellLinkW pv);
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void SHAddToRecentDocs(string path)
+        {
+            _SHAddToRecentDocs_String(SHARD.PATHW, path);
+        }
+
+        // Win7 only.
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void SHAddToRecentDocs(IShellLinkW shellLink)
+        {
+            _SHAddToRecentDocs_ShellLink(SHARD.LINK, shellLink);
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void SHAddToRecentDocs(SHARDAPPIDINFO info)
+        {
+            _SHAddToRecentDocsObj(SHARD.APPIDINFO, info);
+        }
+
+        [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
+        public static void SHAddToRecentDocs(SHARDAPPIDINFOIDLIST infodIdList)
+        {
+            _SHAddToRecentDocsObj(SHARD.APPIDINFOIDLIST, infodIdList);
+        }
 
         [SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         [DllImport("shell32.dll", PreserveSig = false)]

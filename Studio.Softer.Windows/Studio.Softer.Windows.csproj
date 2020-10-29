@@ -51,21 +51,17 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BITMAPINFOHEADER.cs" />
     <Compile Include="ComGuids.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="DoubleUtil.cs" />
     <Compile Include="DpiHelper.cs" />
     <Compile Include="ErrorCodes.cs" />
-    <Compile Include="HitTest.cs" />
-    <Compile Include="MARGINS.cs" />
     <Compile Include="MessageWindow.cs" />
-    <Compile Include="MINMAXINFO.cs" />
+    <Compile Include="MonitorHelper.cs" />
     <Compile Include="MONITORINFO.cs" />
     <Compile Include="NativeMethods.cs" />
-    <Compile Include="NonClientFrameEdges.cs" />
-    <Compile Include="NONCLIENTMETRICS.cs" />
-    <Compile Include="POINT.cs" />
+    <Compile Include="NtDll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -79,22 +75,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RECT.cs" />
-    <Compile Include="ResizeGripDirection.cs" />
+    <Compile Include="SafeLibraryHandle.cs" />
     <Compile Include="ShellProvider.cs" />
     <Compile Include="StreamHelper.cs" />
     <Compile Include="SystemCommands.cs" />
     <Compile Include="SystemParameters2.cs" />
     <Compile Include="UI\MainWindow.cs" />
+    <Compile Include="UnsafeNativeMethods.cs" />
     <Compile Include="Utilities.cs" />
+    <Compile Include="Utilities.Windows.cs" />
+    <Compile Include="Utilities.Wpf.cs" />
     <Compile Include="Verify.cs" />
-    <Compile Include="Win32Value.cs" />
     <Compile Include="WindowChrome.cs" />
     <Compile Include="WindowChromeWorker.cs" />
-    <Compile Include="WindowMessage.cs" />
-    <Compile Include="WINDOWPLACEMENT.cs" />
-    <Compile Include="WINDOWPOS.cs" />
-    <Compile Include="WNDCLASSEX.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
