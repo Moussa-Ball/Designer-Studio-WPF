@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
+using System.Windows.Media;
 
-namespace Coder
+namespace Designer
 {
     /// <summary>
     /// Main class of this application (Coder Studio).

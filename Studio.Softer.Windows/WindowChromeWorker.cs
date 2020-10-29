@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using System.Security;
@@ -835,7 +836,7 @@ namespace Studio.Softer.Windows
             }
 
             HT ht = _HitTestNca(
-                DpiHelper.DeviceRectToLogical(windowPosition),
+                DpiHelper.DeviceRectToLogical(windowPosition), 
                 DpiHelper.DevicePixelsToLogical(mousePosScreen));
 
             handled = true;

@@ -81,6 +81,7 @@
     <Compile Include="SystemCommands.cs" />
     <Compile Include="SystemParameters2.cs" />
     <Compile Include="UI\MainWindow.cs" />
+    <Compile Include="UI\WindowTitleBar.cs" />
     <Compile Include="UnsafeNativeMethods.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Utilities.Windows.cs" />
