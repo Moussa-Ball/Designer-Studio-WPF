@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Threading;
+using System.Windows.Media;
 using Studio.Softer.Interoperate;
 
 namespace Studio.Softer
@@ -10,6 +11,11 @@ namespace Studio.Softer
         /// Mutex instance used to manage the single instance.
         /// </summary>
         private Mutex m_mutex;
+
+        /// <summary>
+        /// Represents the main icon of an application.
+        /// </summary>
+        public abstract ImageSource Icon { get; }
 
         /// <summary>
         /// Get the current app domain.
@@ -36,8 +42,10 @@ namespace Studio.Softer
                 m_mutex.ReleaseMutex();
                 MainWindow = new UI.SofterWindow
                 {
+                    Icon = Icon,
+                    Width = 1024,
                     Height = 768,
-                    Width = 1024
+                    Title = FullName
                 };
                 MainWindow.Show();
                 Run(MainWindow);
@@ -55,7 +63,7 @@ namespace Studio.Softer
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            DictionnariesManager.AddResource("Styles/SofterWindow.xaml");
+            ResourcesManager.AddDictionnaryResource("Styles/SofterWindow.xaml");
             base.OnStartup(e);
         }
     }

@@ -9,35 +9,49 @@
         <Setter Property="win:WindowChrome.WindowChrome">
             <Setter.Value>
                 <win:WindowChrome CornerRadius="0"
-                                      CaptionHeight="0"
-                                      GlassFrameThickness="0"
-                                      ResizeBorderThickness="6"
-                                      NonClientFrameEdges="None"
-                                      UseAeroCaptionButtons="False"/>
+                                  CaptionHeight="32"
+                                  GlassFrameThickness="0"
+                                  ResizeBorderThickness="6"
+                                  NonClientFrameEdges="None"
+                                  UseAeroCaptionButtons="False"/>
             </Setter.Value>
         </Setter>
+        <Setter Property="Background" Value="#252525"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SofterWindow}">
                     <Border Background="#252525">
                         <Grid>
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <winui:WindowTitleBar Grid.Row="0"
-                                                  Background="#202020"                                                 
-                                                  BorderThickness="0 0 0 1" 
-                                                  BorderBrush="#151515"
-                                                  VerticalAlignment="Top"
-                                                  Height="35"
-                                                  x:Name="PART_WindowTitleBar"
-                                                  Panel.ZIndex="1000000">
-                                <DockPanel Height="30"
-                                           VerticalAlignment="Top"
-                                           LastChildFill="False">
-                                    <Image Source="{TemplateBinding Icon}" />
-                                </DockPanel>
-                            </winui:WindowTitleBar>
+                            <Border Grid.Row="0"
+                                    Background="#202020"                                                 
+                                    BorderThickness="0 0 0 1" 
+                                    BorderBrush="#181818"
+                                    VerticalAlignment="Top">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <DockPanel Height="30"
+                                               Grid.Column="0"
+                                               VerticalAlignment="Top" 
+                                               LastChildFill="False" 
+                                               Margin="5 3 5 3"
+                                               win:WindowChrome.IsHitTestVisibleInChrome="True">
+                                        <winui:WindowTitleBarIcon Source="{TemplateBinding Icon}"
+                                                                  x:Name="PART_WindowTitleBarIcon"
+                                                                  win:WindowChrome.IsHitTestVisibleInChrome="True"/>
+                                    </DockPanel>
+                                </Grid>
+                            </Border>
                         </Grid>
                     </Border>
                 </ControlTemplate>

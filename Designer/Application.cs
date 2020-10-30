@@ -1,4 +1,5 @@
 ﻿using System;
+using Studio.Softer;
 using System.Reflection;
 using System.Windows.Media;
 
@@ -80,5 +81,10 @@ namespace Designer
         /// Contains the log file path.
         /// </summary>
         public override string logFilePath => GetOrCreateFilePath(Environment.SpecialFolder.ApplicationData, FullName, "logging.log");
+
+        /// <summary>
+        /// Represents the main icon of an application.
+        /// </summary>
+        public override ImageSource Icon => ResourcesManager.AddImageSource("Icons/designer.png");
     }
 }

@@ -7,12 +7,12 @@ using System.Windows;
 // Les informations générales relatives à un assembly dépendent de
 // l'ensemble d'attributs suivant. Pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("Unreal Studio")]
+[assembly: AssemblyTitle("Designer Studio")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Unreal Studio")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyProduct("Designer Studio")]
+[assembly: AssemblyCopyright("Copyright © StudioSofter 2020. All right reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
