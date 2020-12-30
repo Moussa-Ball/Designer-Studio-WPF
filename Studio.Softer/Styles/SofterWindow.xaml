@@ -9,18 +9,18 @@
         <Setter Property="win:WindowChrome.WindowChrome">
             <Setter.Value>
                 <win:WindowChrome CornerRadius="0"
-                                  CaptionHeight="32"
+                                  CaptionHeight="0"
                                   GlassFrameThickness="0"
                                   ResizeBorderThickness="6"
                                   NonClientFrameEdges="None"
                                   UseAeroCaptionButtons="False"/>
             </Setter.Value>
         </Setter>
-        <Setter Property="Background" Value="#252525"/>
+        <Setter Property="Background" Value="{DynamicResource Studio.Softer.UI.SofterWindow.Background}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SofterWindow}">
-                    <Border Background="#252525">
+                    <Border Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -28,11 +28,11 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            <Border Grid.Row="0"
-                                    Background="#202020"                                                 
-                                    BorderThickness="0 0 0 1" 
-                                    BorderBrush="#181818"
-                                    VerticalAlignment="Top">
+                            <winui:WindowCommands Grid.Row="0"
+                                                  Background="{DynamicResource Studio.Softer.UI.WindowTitleBar.Background}"                                          
+                                                  BorderBrush="#181818"
+                                                  VerticalAlignment="Top"
+                                                  BorderThickness="0 0 0 1">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
@@ -40,18 +40,25 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
+                                    <!--#region WindowIconCommand -->
                                     <DockPanel Height="30"
                                                Grid.Column="0"
                                                VerticalAlignment="Top" 
                                                LastChildFill="False" 
-                                               Margin="5 3 5 3"
-                                               win:WindowChrome.IsHitTestVisibleInChrome="True">
-                                        <winui:WindowTitleBarIcon Source="{TemplateBinding Icon}"
-                                                                  x:Name="PART_WindowTitleBarIcon"
-                                                                  win:WindowChrome.IsHitTestVisibleInChrome="True"/>
+                                               Margin="5 3 5 3">
+                                        <winui:WindowIconCommand Source="{TemplateBinding Icon}" x:Name="PART_WindowTitleBarIcon"/>
                                     </DockPanel>
+                                    <!--#endregion -->
+                                    
+                                    <!--#region Window Menu-->
+                                    <Menu Width="0" Grid.Column="1"/>
+                                    <!--#endregion-->
+
+                                    <!--#region WindowButtonCommands -->
+                                    <winui:WindowButtonCommands x:Name="PART_WindowButtonCommands" Grid.Column="2" />
+                                    <!--#endregion-->
                                 </Grid>
-                            </Border>
+                            </winui:WindowCommands>
                         </Grid>
                     </Border>
                 </ControlTemplate>

@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:win="clr-namespace:Studio.Softer.Windows;assembly=Studio.Softer.Windows"
+                    xmlns:winui="clr-namespace:Studio.Softer.Windows.UI;assembly=Studio.Softer.Windows">
+
+    <ResourceDictionary.MergedDictionaries>
+        <!--Menu-->
+        <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/Menu.xaml" />
+        <!--Button Commands-->
+        <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/WindowButtonCommands.xaml" />
+        <!--Main Window-->
+        <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/SofterWindow.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

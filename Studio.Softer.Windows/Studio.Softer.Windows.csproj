@@ -20,7 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
@@ -38,6 +38,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -82,8 +83,12 @@
     <Compile Include="StreamHelper.cs" />
     <Compile Include="SystemCommands.cs" />
     <Compile Include="SystemParameters2.cs" />
+    <Compile Include="UI\ClosingWindowEventHandlerArgs.cs" />
+    <Compile Include="UI\TreeHelper.cs" />
+    <Compile Include="UI\WindowButtonCommands.cs" />
     <Compile Include="UI\MainWindow.cs" />
-    <Compile Include="UI\WindowTitleBarIcon.cs" />
+    <Compile Include="UI\WindowCommands.cs" />
+    <Compile Include="UI\WindowIconCommand.cs" />
     <Compile Include="UnsafeNativeMethods.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="Utilities.Windows.cs" />
@@ -100,5 +105,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

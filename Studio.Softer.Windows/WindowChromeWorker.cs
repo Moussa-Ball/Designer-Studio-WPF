@@ -698,8 +698,8 @@ namespace Studio.Softer.Windows
                 var monitorInfo = NativeMethods.GetMonitorInfo(monitor);;
 
                 var rc = (RECT)Marshal.PtrToStructure(lParam, typeof(RECT));
-                rc.Left = monitorInfo.rcWork.Left;
                 rc.Top = monitorInfo.rcWork.Top;
+                rc.Left = monitorInfo.rcWork.Left;
                 rc.Right = monitorInfo.rcWork.Right;
                 rc.Bottom = monitorInfo.rcWork.Bottom;
 

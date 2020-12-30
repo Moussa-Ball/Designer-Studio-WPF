@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:System="clr-namespace:System;assembly=mscorlib"
+                    xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    mc:Ignorable="options">
+
+    
+    <!--#region WINDOWS -->
+    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.Background" Color="#252525" options:Freeze="True"/>
+    <!--#endregion WINDOWS -->
+
+    
+    <!--#region TITLE BAR -->
+    <SolidColorBrush x:Key="Studio.Softer.UI.WindowTitleBar.Background" Color="#303030" options:Freeze="True"/>
+    <!--#endregion TITLE BAR -->
+
+    
+    <!--#region BUTTON COMMANDS -->
+    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.ButtonCommands.Foreground" Color="#FFFFFF" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.ButtonCommands.Background" Color="#404040" options:Freeze="True"/>
+    <!--#endregion BUTTON COMMANDS -->
+
+    
+    <!--#region Menu-->
+    <SolidColorBrush x:Key="Foreground" Color="#F1F1F1" options:Freeze="True" />
+    <SolidColorBrush x:Key="BackgroundSelected" Color="#FFFFFF" options:Freeze="True" />
+    <SolidColorBrush x:Key="LightBackground" Color="Transparent" options:Freeze="True" />
+    <SolidColorBrush x:Key="SubmenuItemBackground" Color="#1B1B1C" options:Freeze="True" />
+    <SolidColorBrush x:Key="MenuDisabledForeground" Color="#656565" options:Freeze="True" />
+    <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#333337" options:Freeze="True" />
+    <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#3E3E40" options:Freeze="True" />
+    <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#333334" options:Freeze="True" />
+    <!--#endregion-->
+
+</ResourceDictionary>

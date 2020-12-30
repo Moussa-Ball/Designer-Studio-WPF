@@ -43,7 +43,7 @@ namespace Studio.Softer
                 MainWindow = new UI.SofterWindow
                 {
                     Icon = Icon,
-                    Width = 1024,
+                    Width = 1280,
                     Height = 768,
                     Title = FullName
                 };
@@ -63,7 +63,8 @@ namespace Studio.Softer
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
-            ResourcesManager.AddDictionnaryResource("Styles/SofterWindow.xaml");
+            ResourcesManager.AddDictionnaryResource("Schemes/DarkScheme.xaml");
+            ResourcesManager.AddDictionnaryResource("Styles/CoreStyle.xaml");
             base.OnStartup(e);
         }
     }

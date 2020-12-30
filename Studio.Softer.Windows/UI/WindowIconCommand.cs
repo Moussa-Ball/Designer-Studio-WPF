@@ -4,7 +4,7 @@ using System.Windows.Controls;
 
 namespace Studio.Softer.Windows.UI
 {
-    public class WindowTitleBarIcon : Image
+    public class WindowIconCommand : Image
     {
         protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
         {
