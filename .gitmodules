@@ -1,0 +1,6 @@
+[submodule "libcore/vendor/spdlog"]
+	path = libcore/vendor/spdlog
+	url = https://github.com/gabime/spdlog
+[submodule "libcore/vendor/libconfig"]
+	path = libcore/vendor/libconfig
+	url = https://github.com/hyperrealm/libconfig
