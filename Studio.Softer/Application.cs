@@ -1,7 +1,12 @@
 ﻿using System.Windows;
 using System.Threading;
 using System.Windows.Media;
+using System.ComponentModel;
+using Studio.Softer.Services;
+using Studio.Softer.settings;
 using Studio.Softer.Interoperate;
+using Studio.Softer.Interoperate.Services;
+using Studio.Softer.Interoperate.Settings;
 
 namespace Studio.Softer
 {
@@ -23,7 +28,7 @@ namespace Studio.Softer
         public static new Application Current => (Application)System.Windows.Application.Current;
 
         /// <summary>
-        /// Defualt constructor of this class.
+        /// Default constructor of this class.
         /// </summary>
         public Application()
         {
@@ -40,15 +45,11 @@ namespace Studio.Softer
             if (newInstance)
             {
                 m_mutex.ReleaseMutex();
-                MainWindow = new UI.SofterWindow
-                {
-                    Icon = Icon,
-                    Width = 1280,
-                    Height = 768,
-                    Title = FullName
-                };
-                MainWindow.Show();
-                Run(MainWindow);
+
+                /* First show the splash screen */
+                var splashScreen = new UI.SplashScreen { Icon = Icon, Title = FullName };
+                splashScreen.Show();
+                Run(splashScreen);
             }
             else
             {
@@ -66,6 +67,37 @@ namespace Studio.Softer
             ResourcesManager.AddDictionnaryResource("Schemes/DarkScheme.xaml");
             ResourcesManager.AddDictionnaryResource("Styles/CoreStyle.xaml");
             base.OnStartup(e);
+        }
+
+        /// <summary>
+        /// Allows to register any services used for an application.
+        /// </summary>
+        /// <param name="services"></param>
+        protected override void RegisterServices(ServiceManager services)
+        {
+            base.RegisterServices(services);
+            services.Publish(new WindowService());
+        }
+
+        /// <summary>
+        /// It is called after all the services have been registered.
+        /// </summary>
+        /// <param name="services"></param>
+        protected override void OnServicesRegistered(ServiceManager services)
+        {
+            base.OnServicesRegistered(services);
+            services.GetService<WindowService>().CreateInstance();
+            GetService<WindowService>().CreateInstance();
+        }
+
+        /// <summary>
+        /// When the main window is closing.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected override void OnClosing(object sender, CancelEventArgs e)
+        {
+            base.OnClosing(sender, e);
         }
     }
 }

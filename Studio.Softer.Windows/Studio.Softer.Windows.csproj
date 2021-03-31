@@ -64,6 +64,7 @@
     <Compile Include="MonitorHelper.cs" />
     <Compile Include="MONITORINFO.cs" />
     <Compile Include="NativeMethods.cs" />
+    <Compile Include="NotifyPropertyChanged.cs" />
     <Compile Include="NtDll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -84,6 +85,11 @@
     <Compile Include="SystemCommands.cs" />
     <Compile Include="SystemParameters2.cs" />
     <Compile Include="UI\ClosingWindowEventHandlerArgs.cs" />
+    <Compile Include="UI\Controls\SofterControl.cs" />
+    <Compile Include="UI\Controls\SofterItem.cs" />
+    <Compile Include="UI\Controls\SofterPanel.cs" />
+    <Compile Include="UI\Controls\SofterPersistBehavior.cs" />
+    <Compile Include="UI\SimpleWindow.cs" />
     <Compile Include="UI\TreeHelper.cs" />
     <Compile Include="UI\WindowButtonCommands.cs" />
     <Compile Include="UI\MainWindow.cs" />
@@ -105,6 +111,8 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Converters\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

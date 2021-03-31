@@ -1,0 +1,12 @@
+﻿<Window x:Class="Studio.Softer.UI.SplashScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        AllowsTransparency="True" Background="Transparent"
+        WindowStyle="None" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" Height="480" Width="750" ResizeMode="NoResize">
+    <Border Background="Transparent" BorderBrush="Transparent">
+        <Image Source="designer-splash.jpg" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Fill"/>
+    </Border>
+</Window>

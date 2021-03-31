@@ -91,5 +91,9 @@
   <ItemGroup>
     <Resource Include="Icons\designer.png" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="splashscreen\designer-splash.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

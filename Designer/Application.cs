@@ -80,11 +80,13 @@ namespace Designer
         /// <summary>
         /// Contains the log file path.
         /// </summary>
-        public override string logFilePath => GetOrCreateFilePath(Environment.SpecialFolder.ApplicationData, FullName, "logging.log");
+        public override string logFilePath => GetOrCreateFilePath(Environment.SpecialFolder.ApplicationData, FullName, ShortName.ToLower() + ".log");
 
         /// <summary>
         /// Represents the main icon of an application.
         /// </summary>
         public override ImageSource Icon => ResourcesManager.AddImageSource("Icons/designer.png");
+
+
     }
 }

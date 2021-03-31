@@ -1180,8 +1180,6 @@ namespace Studio.Softer.Windows
         [SecurityCritical]
         private void _SetRoundingRegion(WINDOWPOS? wp)
         {
-            const int MONITOR_DEFAULTTONEAREST = 0x00000002;
-
             // We're early - WPF hasn't necessarily updated the state of the window.
             // Need to query it ourselves.
             WINDOWPLACEMENT wpl = NativeMethods.GetWindowPlacement(_hwnd);

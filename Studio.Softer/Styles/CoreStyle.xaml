@@ -6,8 +6,10 @@
     <ResourceDictionary.MergedDictionaries>
         <!--Menu-->
         <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/Menu.xaml" />
+
         <!--Button Commands-->
         <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/WindowButtonCommands.xaml" />
+
         <!--Main Window-->
         <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/SofterWindow.xaml" />
     </ResourceDictionary.MergedDictionaries>

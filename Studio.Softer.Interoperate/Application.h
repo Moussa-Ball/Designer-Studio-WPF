@@ -1,8 +1,10 @@
 #pragma once
 
+#include "Services/ServiceManager.h"
+#include "Settings/SettingsManager.h"
+
 using namespace System;
 using namespace System::IO;
-using namespace System::Activities::Presentation;
 
 namespace Studio
 {
@@ -62,8 +64,30 @@ namespace Studio
 				/* Allows to get a file path */
 				String^ GetOrCreateFilePath(Environment::SpecialFolder sysfolder, String^ folderPath, String^ filename);
 
+				/// <summary>
+				/// Get a specific service from services manager.
+				/// </summary>
+				/// <param name="serviceType">The type of service.</param>
+				/// <returns>The object of service.</returns>
+				Object^ GetService(System::Type^ serviceType);
+
+
+				generic<typename T> where T : ref class Object^ GetService(T serviceType)
+				{
+					return this->GetService(serviceType);
+				}
+
 			protected:
-				virtual void OnStartup(System::Windows::StartupEventArgs^ e) override;
+				// Services Manager methods
+				virtual void RegisterServices(Services::ServiceManager^ services);
+				virtual void OnServicesRegistered(Services::ServiceManager^ services);
+
+				// Event Handling
+				void virtual OnStartup(System::Windows::StartupEventArgs^ e) override;
+				virtual void OnClosing(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
+
+			private:
+				Services::ServiceManager^ services = gcnew Services::ServiceManager();
 			};
 		}
 	}
