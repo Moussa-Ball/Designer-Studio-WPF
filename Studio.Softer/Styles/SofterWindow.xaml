@@ -26,6 +26,8 @@
                                   UseAeroCaptionButtons="False"/>
             </Setter.Value>
         </Setter>
+        <Setter Property="MinWidth" Value="1020"/>
+        <Setter Property="MinHeight" Value="600"/>
         <Setter Property="Background" Value="{DynamicResource Studio.Softer.UI.SofterWindow.Background}"/>
         <Setter Property="Template">
             <Setter.Value>
