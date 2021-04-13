@@ -4,6 +4,8 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 
+#include <iostream>
+
 void Libcore::Logger::Logging::open(std::string logName, std::string filePath)
 {
 	try {

@@ -80,13 +80,18 @@ namespace Designer
         /// <summary>
         /// Contains the log file path.
         /// </summary>
-        public override string logFilePath => GetOrCreateFilePath(Environment.SpecialFolder.ApplicationData, FullName, ShortName.ToLower() + ".log");
+        public override string logFilePath => GetOrCreateFilePath(Environment.SpecialFolder.ApplicationData, 
+            $"StudioSofter\\" + ShortName + "\\" + MajorVersion + "." + MinorVersion + "\\", ShortName.ToLower() + ".log");
+
+        /// <summary>
+        /// Contains the settings folder path.
+        /// </summary>
+        public override string SettingsFolder => GetOrCreateDirectory(Environment.SpecialFolder.ApplicationData,
+            $"StudioSofter\\" + ShortName + "\\" + MajorVersion + "." + MinorVersion + "\\" + "\\Settings");
 
         /// <summary>
         /// Represents the main icon of an application.
         /// </summary>
-        public override ImageSource Icon => ResourcesManager.AddImageSource("Icons/designer.png");
-
-
+        public override ImageSource Icon => ResourcesManager.AddImageSource("resources/icon/designer.png");
     }
 }

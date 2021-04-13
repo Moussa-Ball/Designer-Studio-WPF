@@ -1,9 +1,3 @@
-[submodule "libcore/vendor/spdlog"]
-	path = libcore/vendor/spdlog
-	url = https://github.com/gabime/spdlog
-[submodule "libcore\\vendor\\property_tree"]
-	path = libcore\\vendor\\property_tree
-	url = https://github.com/boostorg/property_tree
 [submodule "libcore\\vendor\\spdlog"]
 	path = libcore\\vendor\\spdlog
 	url = https://github.com/gabime/spdlog

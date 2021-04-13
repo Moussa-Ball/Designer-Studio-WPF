@@ -68,7 +68,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Services\WindowService.cs" />
-    <Compile Include="settings\WindowSettings.cs" />
+    <Compile Include="Settings\WindowSettings.cs" />
     <Compile Include="UI\MenuItemContainerTemplateSelector.cs" />
     <Compile Include="UI\SofterWindow.cs" />
     <Compile Include="UI\SplashScreen.xaml.cs">
@@ -83,6 +83,18 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="Resources\fonts\GothamRounded-Bold.otf" />
+    <Resource Include="Resources\fonts\GothamRounded-BoldItalic.otf" />
+    <Resource Include="Resources\fonts\GothamRounded-Book.otf" />
+    <Resource Include="Resources\fonts\GothamRounded-BookItalic.otf" />
+    <Resource Include="Resources\fonts\GothamRounded-Light.otf" />
+    <Resource Include="Resources\fonts\GothamRounded-LightItalic.otf" />
+    <Resource Include="Resources\fonts\GothamRounded-Medium.otf" />
+    <Resource Include="Resources\fonts\GothamRounded-MediumItalic.otf" />
+    <Resource Include="Resources\fonts\GothamRoundedBold_21016.ttf" />
+    <Resource Include="Resources\fonts\GothamRoundedBook_21018.ttf" />
+    <Resource Include="Resources\fonts\GothamRoundedLight_21020.ttf" />
+    <Resource Include="Resources\fonts\GothamRoundedMedium_21022.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Studio.Softer.Interoperate\Studio.Softer.Interoperate.vcxproj">
@@ -93,9 +105,6 @@
       <Project>{563aa3b9-8d24-47fb-96bf-9852f97e8306}</Project>
       <Name>Studio.Softer.Windows</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="UI\designer-splash.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Schemes\DarkScheme.xaml">
@@ -122,9 +131,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="UI\designer-splash.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

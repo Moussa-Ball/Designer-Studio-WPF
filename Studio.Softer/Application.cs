@@ -1,9 +1,11 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Threading;
 using System.Windows.Media;
 using System.ComponentModel;
 using Studio.Softer.Services;
 using Studio.Softer.settings;
+using System.Windows.Threading;
 using Studio.Softer.Interoperate;
 using Studio.Softer.Interoperate.Services;
 using Studio.Softer.Interoperate.Settings;
@@ -12,6 +14,8 @@ namespace Studio.Softer
 {
     public abstract class Application : Interoperate.Application
     {
+        UI.SplashScreen m_splash;
+
         /// <summary>
         /// Mutex instance used to manage the single instance.
         /// </summary>
@@ -45,11 +49,10 @@ namespace Studio.Softer
             if (newInstance)
             {
                 m_mutex.ReleaseMutex();
-
-                /* First show the splash screen */
-                var splashScreen = new UI.SplashScreen { Icon = Icon, Title = FullName };
-                splashScreen.Show();
-                Run(splashScreen);
+                // Show the splashscreen
+                m_splash = new UI.SplashScreen();
+                m_splash.Show();
+                Run(m_splash);
             }
             else
             {
@@ -64,6 +67,7 @@ namespace Studio.Softer
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            Logger.Info("Starting Application");
             ResourcesManager.AddDictionnaryResource("Schemes/DarkScheme.xaml");
             ResourcesManager.AddDictionnaryResource("Styles/CoreStyle.xaml");
             base.OnStartup(e);
@@ -86,18 +90,14 @@ namespace Studio.Softer
         protected override void OnServicesRegistered(ServiceManager services)
         {
             base.OnServicesRegistered(services);
-            services.GetService<WindowService>().CreateInstance();
+            // Creates a new instance of main window and shows it.
             GetService<WindowService>().CreateInstance();
-        }
-
-        /// <summary>
-        /// When the main window is closing.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        protected override void OnClosing(object sender, CancelEventArgs e)
-        {
-            base.OnClosing(sender, e);
+            GetService<WindowService>().Show();
+            
+            // Async thread for UI to c
+            Current.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, (Action)(() => {
+                m_splash.Close();
+            }));
         }
     }
 }

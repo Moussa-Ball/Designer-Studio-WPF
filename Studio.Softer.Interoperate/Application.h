@@ -16,7 +16,7 @@ namespace Studio
 			{
 			public:
 				/* Get the current app domain. */
-				static property Application^ Current { 
+				static property Application^ Current {
 					Application^ get() {
 						return static_cast<Application^>(System::Windows::Application::Current);
 					} 
@@ -54,6 +54,9 @@ namespace Studio
 				
 				/* Contains the log file path */
 				virtual property String^ logFilePath { String^ get() { return logFilePath; }}
+				
+				/* Contains the settings folder path */
+				virtual property String^ SettingsFolder { String^ get() { return SettingsFolder; }}
 
 				/* Allows to get full path of an folder from windows os. */
 				String^ GetSystemFolder(Environment::SpecialFolder sysfolder);
@@ -65,18 +68,22 @@ namespace Studio
 				String^ GetOrCreateFilePath(Environment::SpecialFolder sysfolder, String^ folderPath, String^ filename);
 
 				/// <summary>
-				/// Get a specific service from services manager.
+				/// Get a specific service from services manager using a generic method.
 				/// </summary>
-				/// <param name="serviceType">The type of service.</param>
+				/// <typeparam name="T">The type of service.</typeparam>
 				/// <returns>The object of service.</returns>
-				Object^ GetService(System::Type^ serviceType);
-
-
-				generic<typename T> where T : ref class Object^ GetService(T serviceType)
+				generic<typename T> where T: ref class T GetService() 
 				{
-					return this->GetService(serviceType);
+					return static_cast<T>(this->services->GetService(T::typeid));
 				}
 
+				/// <summary>
+				/// Allows to get the service manager.
+				/// This allows to manage service in other context.
+				/// </summary>
+				/// <returns></returns>
+				Object^ GetServiceManager() { return this->services; }
+				
 			protected:
 				// Services Manager methods
 				virtual void RegisterServices(Services::ServiceManager^ services);
@@ -84,7 +91,6 @@ namespace Studio
 
 				// Event Handling
 				void virtual OnStartup(System::Windows::StartupEventArgs^ e) override;
-				virtual void OnClosing(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e);
 
 			private:
 				Services::ServiceManager^ services = gcnew Services::ServiceManager();

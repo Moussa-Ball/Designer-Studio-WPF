@@ -19,6 +19,12 @@
     <Filter Include="Source Files\Services">
       <UniqueIdentifier>{e362597e-7b30-445f-9970-775967d0af4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Settings">
+      <UniqueIdentifier>{87e0192b-0ce0-4eff-b349-e8dbdeb7c22b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Settings">
+      <UniqueIdentifier>{1626ef62-5755-4a6d-9419-5ea01bac915b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
@@ -34,9 +40,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Services\ServiceManager.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Services</Filter>
     </ClInclude>
     <ClInclude Include="Settings\SettingsManager.h">
+      <Filter>Header Files\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings\SettingsBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -54,9 +63,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Services\ServiceManager.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Services</Filter>
     </ClCompile>
     <ClCompile Include="Settings\SettingsManager.cpp">
+      <Filter>Source Files\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings\SettingsBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

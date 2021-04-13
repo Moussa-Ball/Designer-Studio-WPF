@@ -2,7 +2,7 @@
 
 namespace Studio.Softer.UI
 {
-    internal class SofterWindow : Windows.UI.MainWindow
+    public class SofterWindow : Windows.UI.MainWindow
     {
         static SofterWindow()
         {

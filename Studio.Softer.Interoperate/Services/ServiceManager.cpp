@@ -21,7 +21,7 @@ namespace Studio
 					this->CheckIsNullableAndThrowException(serviceType);
 					Object^ value = nullptr;
 					this->services->TryGetValue(serviceType, value);
-					return value;
+					return static_cast<Object^>(value);
 				}
 				
 				System::Collections::Generic::IEnumerator<System::Type^>^ ServiceManager::GetEnumerator()

@@ -24,19 +24,9 @@ String^ Studio::Softer::Interoperate::Application::GetOrCreateFilePath(Environme
     return filepath;
 }
 
-Object^ Studio::Softer::Interoperate::Application::GetService(System::Type^ serviceType)
-{
-    return this->services->GetService(serviceType);
-}
-
 void Studio::Softer::Interoperate::Application::OnStartup(System::Windows::StartupEventArgs^ e)
 {
     System::Windows::Application::OnStartup(e);
-
-    this->MainWindow->Closing += gcnew System::ComponentModel::CancelEventHandler(this,
-        &Studio::Softer::Interoperate::Application::OnClosing);
-
-    // Register and get all services.
     this->RegisterServices(this->services);
     this->OnServicesRegistered(this->services);
 }
@@ -44,5 +34,3 @@ void Studio::Softer::Interoperate::Application::OnStartup(System::Windows::Start
 void Studio::Softer::Interoperate::Application::RegisterServices(Services::ServiceManager^ services) {}
 
 void Studio::Softer::Interoperate::Application::OnServicesRegistered(Services::ServiceManager^ services) {}
-
-void Studio::Softer::Interoperate::Application::OnClosing(System::Object^ sender, System::ComponentModel::CancelEventArgs^ e) {}

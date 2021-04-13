@@ -6,7 +6,7 @@
         AllowsTransparency="True" Background="Transparent"
         WindowStyle="None" WindowStartupLocation="CenterScreen"
         mc:Ignorable="d" Height="480" Width="750" ResizeMode="NoResize">
-    <Border Background="Transparent" BorderBrush="Transparent">
-        <Image Source="designer-splash.jpg" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="Fill"/>
+    <Border Background="Transparent" BorderBrush="Transparent" BorderThickness="0">
+        <!-- TODO: HERE -->
     </Border>
 </Window>
