@@ -2,13 +2,10 @@
 using System.Windows;
 using System.Threading;
 using System.Windows.Media;
-using System.ComponentModel;
 using Studio.Softer.Services;
-using Studio.Softer.settings;
 using System.Windows.Threading;
 using Studio.Softer.Interoperate;
 using Studio.Softer.Interoperate.Services;
-using Studio.Softer.Interoperate.Settings;
 
 namespace Studio.Softer
 {

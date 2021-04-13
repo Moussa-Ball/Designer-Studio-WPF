@@ -1,5 +1,5 @@
 ﻿using Studio.Softer.UI;
-using Studio.Softer.settings;
+using Studio.Softer.Settings;
 
 namespace Studio.Softer.Services
 {
@@ -52,11 +52,11 @@ namespace Studio.Softer.Services
         private void LoadWindowSettings()
         {
             Settings.LoadSettings();
-            MainWindow.Top = Settings.Top;
-            MainWindow.Left = Settings.Left;
             MainWindow.Width = Settings.Width;
             MainWindow.Height = Settings.Height;
             MainWindow.WindowState = Settings.WindowState;
+            MainWindow.Top = (Settings.Top > 0) ? Settings.Top : 100;
+            MainWindow.Left = (Settings.Left > 0) ? Settings.Top : 100;
         }
 
         /// <summary>

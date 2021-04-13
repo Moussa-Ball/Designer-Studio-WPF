@@ -1,8 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Windows;
+using System.ComponentModel;
 
-namespace Studio.Softer.settings
+namespace Studio.Softer.Settings
 {
     public class WindowSettings : Interoperate.Settings.SettingsBase
     {
