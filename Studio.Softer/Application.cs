@@ -34,6 +34,8 @@ namespace Studio.Softer
         public Application()
         {
             Logger.Open(FullName, logFilePath);
+            ResourcesManager.AddDictionnaryResource("Schemes/DarkScheme.xaml");
+            ResourcesManager.AddDictionnaryResource("Styles/CoreStyle.xaml");
         }
 
         /// <summary>
@@ -65,8 +67,6 @@ namespace Studio.Softer
         protected override void OnStartup(StartupEventArgs e)
         {
             Logger.Info("Starting Application");
-            ResourcesManager.AddDictionnaryResource("Schemes/DarkScheme.xaml");
-            ResourcesManager.AddDictionnaryResource("Styles/CoreStyle.xaml");
             base.OnStartup(e);
         }
 
@@ -90,7 +90,7 @@ namespace Studio.Softer
             // Creates a new instance of main window and shows it.
             GetService<WindowService>().CreateInstance();
             GetService<WindowService>().Show();
-            
+
             // Async thread for UI to c
             Current.Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, (Action)(() => {
                 m_splash.Close();

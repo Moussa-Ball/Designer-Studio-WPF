@@ -5,4 +5,4 @@ Professional Cinematic 3D Advertising Software
 
 Copyright (c) Microsoft Corporation. All rights reserved.
 
-Licensed under the [MIT](LICENSE.txt) license.
+Licensed under the [Apache 2](LICENSE.md) license.

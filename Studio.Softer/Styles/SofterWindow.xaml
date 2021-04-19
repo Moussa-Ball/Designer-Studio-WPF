@@ -1,21 +1,13 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Studio.Softer.UI"
-    xmlns:workspaces="clr-namespace:Studio.Softer.Workspaces"
+    xmlns:ui="clr-namespace:Studio.Softer.UI"
     xmlns:win="clr-namespace:Studio.Softer.Windows;assembly=Studio.Softer.Windows"
     xmlns:winui="clr-namespace:Studio.Softer.Windows.UI;assembly=Studio.Softer.Windows">
 
-    <local:MenuItemContainerTemplateSelector x:Key="_menuItemContainerTemplateSelector" />
-    <HierarchicalDataTemplate DataType="{x:Type workspaces:MenuItemViewModel}" ItemsSource="{Binding Children}">
-        <MenuItem Header="{Binding Header}" UsesItemContainerTemplate="true"
-                  ItemContainerTemplateSelector="{StaticResource _menuItemContainerTemplateSelector}"/>
-    </HierarchicalDataTemplate>
-    <DataTemplate DataType="{x:Type workspaces:SeparatorViewModel}">
-        <Separator />
-    </DataTemplate>
+    <ui:MenuItemContainerTemplateSelector x:Key="MenuItemContainerTemplateSelector"/>
 
-    <Style TargetType="{x:Type local:SofterWindow}">
+    <Style TargetType="{x:Type ui:SofterWindow}">
         <Setter Property="win:WindowChrome.WindowChrome">
             <Setter.Value>
                 <win:WindowChrome CornerRadius="0"
@@ -31,7 +23,7 @@
         <Setter Property="Background" Value="{DynamicResource Studio.Softer.UI.SofterWindow.Background}"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:SofterWindow}">
+                <ControlTemplate TargetType="{x:Type ui:SofterWindow}">
                     <Border Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -63,13 +55,7 @@
                                     <!--#endregion -->
 
                                     <!--#region Window Main Menu-->
-                                    <Menu Grid.Column="1"
-                                          VerticalAlignment="Center"
-                                          HorizontalAlignment="Left"
-                                          UsesItemContainerTemplate="True"
-                                          ItemsSource="{Binding MenuItems}"
-                                          ItemContainerTemplateSelector="{StaticResource _menuItemContainerTemplateSelector}">
-                                    </Menu>
+                                    <Menu Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" />
 
                                     <!--#endregion-->
 
