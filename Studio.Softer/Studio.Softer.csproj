@@ -40,6 +40,8 @@
     <Reference Include="System" />
     <Reference Include="System.Activities.Presentation" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application.cs" />
+    <Compile Include="Markup\StaticResourceExtension.cs" />
     <Compile Include="ResourcesManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -69,13 +72,21 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Schemes\SchemeException.cs" />
+    <Compile Include="Schemes\SchemeEnum.cs" />
+    <Compile Include="Schemes\SchemeManager.cs" />
+    <Compile Include="Schemes\SchemeManagerEventArgs.cs" />
+    <Compile Include="Services\SchemeService.cs" />
     <Compile Include="Services\WindowService.cs" />
+    <Compile Include="Services\WorkspaceService.cs" />
+    <Compile Include="Settings\SchemeSettings.cs" />
     <Compile Include="Settings\WindowSettings.cs" />
-    <Compile Include="UI\MenuItemContainerTemplateSelector.cs" />
     <Compile Include="UI\SofterWindow.cs" />
     <Compile Include="UI\SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Workspaces\MenuItemWorkspace.cs" />
+    <Compile Include="Workspaces\WorkspaceContainer.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -108,25 +119,29 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Schemes\LightScheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Schemes\DarkScheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\Menu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Styles\SofterWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\CoreStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Styles\WindowButtonCommands.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Styles\Menu.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\SofterWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\WindowButtonCommands.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UI\SplashScreen.xaml">
       <SubType>Designer</SubType>

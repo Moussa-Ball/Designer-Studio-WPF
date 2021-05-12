@@ -16,10 +16,18 @@ namespace Studio
 				{
 				public:
 					// Name of settings
-					virtual property String^ Name { String^ get() override { return Name; }}
+					virtual property String^ Name { 
+						virtual String^ get() override {
+							return Name; 
+						}
+					}
 
 					// Settings folder
-					virtual property String^ SettingsFolder { String^ get() override { return SettingsFolder; }}
+					virtual property String^ SettingsFolder { 
+						virtual String^ get() override {
+							return SettingsFolder; 
+						}
+					}
 
 					/// <summary>
 					/// Defautl Constructor: Set Absolute file path for settings.

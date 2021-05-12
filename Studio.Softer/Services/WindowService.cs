@@ -1,10 +1,16 @@
 ﻿using Studio.Softer.UI;
 using Studio.Softer.Settings;
+using System.Activities.Presentation;
 
 namespace Studio.Softer.Services
 {
     public class WindowService
     {
+        /// <summary>
+        /// Get Registered Services.
+        /// </summary>
+        private ServiceManager Services { get; set; }
+
         /// <summary>
         /// Get Main Window.
         /// </summary>
@@ -18,8 +24,9 @@ namespace Studio.Softer.Services
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public WindowService()
+        public WindowService(ServiceManager services)
         {
+            Services = services;
             Settings = new WindowSettings();
         }
 
@@ -81,6 +88,9 @@ namespace Studio.Softer.Services
             }
             Settings.WindowState = MainWindow.WindowState;
             Settings.Save();
+
+            // Saves all settings we need.
+            Application.Current.OnMainWindowClosing();
         }
     }
 }

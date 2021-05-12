@@ -79,10 +79,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)boost_1_75_0\bin.v2\libs\filesystem\build\msvc-14.2\debug\address-model-64\link-static\threading-multi;$(LibraryPath)</LibraryPath>
+    <IntDir>$(SolutionDir)$(Platform)-int\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(SolutionDir)boost_1_75_0\bin.v2\libs\filesystem\build\msvc-14.2\debug\address-model-64\link-static\threading-multi;$(LibraryPath)</LibraryPath>
+    <IntDir>$(SolutionDir)$(Platform)-int\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

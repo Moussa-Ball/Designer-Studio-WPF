@@ -48,6 +48,15 @@
     <ClInclude Include="Settings\SettingsBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Commands\Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Workspaces\Workspace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Workspaces\MenuItemWorkspace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp">
@@ -69,6 +78,15 @@
       <Filter>Source Files\Settings</Filter>
     </ClCompile>
     <ClCompile Include="Settings\SettingsBase.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\Command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Workspaces\Workspace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Workspaces\MenuItemWorkspace.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

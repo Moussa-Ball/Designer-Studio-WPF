@@ -57,7 +57,7 @@
                                               ContentSource="InputGestureText" />
                             <Grid x:Name="ArrowPanel"
                                   Grid.Column="3"
-                                  Margin="4 0 6 0"
+                                  Margin="6 0 6 0"
                                   VerticalAlignment="Center">
                                 <Path x:Name="ArrowPanelPath"
                                       HorizontalAlignment="Right"
@@ -105,7 +105,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Role" Value="TopLevelHeader">
-                            <Setter Property="Padding" Value="12 4 12 4" />
+                            <Setter Property="Padding" Value="12 6 12 6" />
                             <Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Col0" Property="MinWidth" Value="0" />
                             <Setter TargetName="Col3" Property="Width" Value="Auto" />
@@ -117,7 +117,8 @@
                             <Setter TargetName="TransitionBorder" Property="Width" Value="{Binding ActualWidth, ElementName=Grid}" />
                         </Trigger>
                         <Trigger Property="Role" Value="TopLevelItem">
-                            <Setter Property="Padding" Value="6 0 6 2" />
+                            <Setter Property="Padding" Value="12 4 12 4" />
+                            <Setter Property="Margin" Value="4 0 4 0" />
                             <Setter TargetName="ArrowPanel" Property="Visibility" Value="Collapsed" />
                             <Setter TargetName="Col0" Property="MinWidth" Value="0" />
                             <Setter TargetName="Col3" Property="Width" Value="Auto" />
@@ -125,8 +126,8 @@
                             <Setter TargetName="Icon" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="Role" Value="SubmenuHeader">
-                            <Setter Property="DockPanel.Dock" Value="Top" />
                             <Setter Property="Padding" Value="10 3 0 3" />
+                            <Setter Property="DockPanel.Dock" Value="Top" />
                             <Setter TargetName="Border" Property="Background" Value="{DynamicResource SubmenuItemBackground}" />
                             <Setter TargetName="Border" Property="MinHeight" Value="22" />
                         </Trigger>

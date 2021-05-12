@@ -3,68 +3,46 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studio.Softer.Windows", "Studio.Softer.Windows\Studio.Softer.Windows.csproj", "{563AA3B9-8D24-47FB-96BF-9852F97E8306}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcore", "libcore\libcore.vcxproj", "{11D26B12-0268-4F7A-9FD3-2E858712AC8E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThreeDimensionalWorkspace", "ThreeDimensionalWorkspace\ThreeDimensionalWorkspace.csproj", "{879E9E2F-D114-4B80-8D96-34EEE7FD9705}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studio.Softer", "Studio.Softer\Studio.Softer.csproj", "{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Designer", "Designer\Designer.csproj", "{1698ED1F-4A79-4042-9273-3D6CF80089F7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studio.Softer.Windows", "Studio.Softer.Windows\Studio.Softer.Windows.csproj", "{563AA3B9-8D24-47FB-96BF-9852F97E8306}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Studio.Softer.Interoperate", "Studio.Softer.Interoperate\Studio.Softer.Interoperate.vcxproj", "{11CD0320-2647-41AE-8218-84967F23C1FA}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcore", "libcore\libcore.vcxproj", "{11D26B12-0268-4F7A-9FD3-2E858712AC8E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
-		Debug|x86 = Debug|x86
-		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Debug|x64.ActiveCfg = Debug|x64
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Debug|x64.Build.0 = Debug|x64
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Debug|x86.ActiveCfg = Debug|x64
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Release|Any CPU.ActiveCfg = Release|x64
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Release|x64.ActiveCfg = Release|x64
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Release|x64.Build.0 = Release|x64
-		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Release|x86.ActiveCfg = Release|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Debug|x64.ActiveCfg = Debug|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Debug|x64.Build.0 = Debug|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Debug|x86.ActiveCfg = Debug|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Release|Any CPU.ActiveCfg = Release|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Release|x64.ActiveCfg = Release|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Release|x64.Build.0 = Release|x64
-		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Release|x86.ActiveCfg = Release|x64
-		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Debug|x64.ActiveCfg = Debug|x64
 		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Debug|x64.Build.0 = Debug|x64
-		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Debug|x86.ActiveCfg = Debug|x64
-		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Release|Any CPU.ActiveCfg = Release|x64
 		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Release|x64.ActiveCfg = Release|x64
 		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Release|x64.Build.0 = Release|x64
-		{563AA3B9-8D24-47FB-96BF-9852F97E8306}.Release|x86.ActiveCfg = Release|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Debug|Any CPU.ActiveCfg = Debug|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Debug|x64.ActiveCfg = Debug|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Debug|x64.Build.0 = Debug|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Debug|x86.ActiveCfg = Debug|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Release|Any CPU.ActiveCfg = Release|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Release|x64.ActiveCfg = Release|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Release|x64.Build.0 = Release|x64
-		{11CD0320-2647-41AE-8218-84967F23C1FA}.Release|x86.ActiveCfg = Release|x64
-		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Debug|x64.ActiveCfg = Debug|x64
 		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Debug|x64.Build.0 = Debug|x64
-		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Debug|x86.ActiveCfg = Debug|Win32
-		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Debug|x86.Build.0 = Debug|Win32
-		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Release|Any CPU.ActiveCfg = Release|Win32
 		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Release|x64.ActiveCfg = Release|x64
 		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Release|x64.Build.0 = Release|x64
-		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Release|x86.ActiveCfg = Release|Win32
-		{11D26B12-0268-4F7A-9FD3-2E858712AC8E}.Release|x86.Build.0 = Release|Win32
+		{879E9E2F-D114-4B80-8D96-34EEE7FD9705}.Debug|x64.ActiveCfg = Debug|x64
+		{879E9E2F-D114-4B80-8D96-34EEE7FD9705}.Debug|x64.Build.0 = Debug|x64
+		{879E9E2F-D114-4B80-8D96-34EEE7FD9705}.Release|x64.ActiveCfg = Release|x64
+		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Debug|x64.ActiveCfg = Debug|x64
+		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Debug|x64.Build.0 = Debug|x64
+		{A5B5A64A-2F11-42B8-A6BD-C6BC674123BE}.Release|x64.ActiveCfg = Release|x64
+		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Debug|x64.ActiveCfg = Debug|x64
+		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Debug|x64.Build.0 = Debug|x64
+		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Release|x64.ActiveCfg = Release|Any CPU
+		{1698ED1F-4A79-4042-9273-3D6CF80089F7}.Release|x64.Build.0 = Release|Any CPU
+		{11CD0320-2647-41AE-8218-84967F23C1FA}.Debug|x64.ActiveCfg = Debug|x64
+		{11CD0320-2647-41AE-8218-84967F23C1FA}.Debug|x64.Build.0 = Debug|x64
+		{11CD0320-2647-41AE-8218-84967F23C1FA}.Release|x64.ActiveCfg = Release|x64
+		{11CD0320-2647-41AE-8218-84967F23C1FA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

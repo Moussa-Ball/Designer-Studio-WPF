@@ -2,6 +2,7 @@
 using Studio.Softer;
 using System.Reflection;
 using System.Windows.Media;
+using Studio.Softer.Workspaces;
 
 namespace Designer
 {
@@ -93,5 +94,14 @@ namespace Designer
         /// Represents the main icon of an application.
         /// </summary>
         public override ImageSource Icon => ResourcesManager.AddImageSource("resources/icon/designer.png");
+
+        /// <summary>
+        /// This method is called for registry workspaces.
+        /// </summary>
+        /// <param name="container"></param>
+        protected override void RegisterWorkspaces(WorkspaceContainer container)
+        {
+            container.AddWorkspace(new ThreeDimensionalWorkspace());
+        }
     }
 }

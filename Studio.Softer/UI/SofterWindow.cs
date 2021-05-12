@@ -8,5 +8,10 @@ namespace Studio.Softer.UI
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(SofterWindow), new FrameworkPropertyMetadata(typeof(SofterWindow)));
         }
+
+        public SofterWindow()
+        {
+            DataContext = Application.Current.GetService<Services.WorkspaceService>();
+        }
     }
 }

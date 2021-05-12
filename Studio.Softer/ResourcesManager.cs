@@ -22,6 +22,16 @@ namespace Studio.Softer
             Application.Current.Resources.MergedDictionaries.Add(resource);
         }
 
+        public static Uri GetAbsoluteUri(string resourceFilePath)
+        {
+            var uri = new Uri(@"pack://application:,,,/" + Assembly.GetCallingAssembly().GetName().Name +
+                ";component" +
+                (resourceFilePath[0] == '/' ? resourceFilePath : "/" + resourceFilePath), UriKind.Absolute);
+            if (uri.IsAbsoluteUri)
+                return uri;
+            return null;
+        }
+
         public static ImageSource AddImageSource(string resourceFilePath)
         {
             BitmapImage img = new BitmapImage();

@@ -4,15 +4,10 @@
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"
 
-#include <boost/filesystem.hpp>
-
 #include <iostream>
 
 void Libcore::Logger::Logging::open(const std::string& logName, const std::string& filePath)
 {
-	if (boost::filesystem::exists(filePath))
-		boost::filesystem::remove(filePath);
-
 	try {
 		spdlog::set_pattern("[%A, %b. %d, %Y - %I:%M %p] - (%n) - [%^%l] -> %v");
 		auto logger = spdlog::basic_logger_mt(logName, filePath);
