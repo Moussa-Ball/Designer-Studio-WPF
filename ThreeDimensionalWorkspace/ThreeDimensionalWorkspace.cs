@@ -1,11 +1,16 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows.Media;
+using System.Windows.Controls;
 using System.Collections.ObjectModel;
 
 namespace Studio.Softer.Workspaces
 {
     public class ThreeDimensionalWorkspace : Interoperate.Workspaces.Workspace
     {
-        public bool Active {
+        /// <summary>
+        /// Defines if the workspace is active or not.
+        /// </summary>
+        public bool Active
+        {
             get
             {
                 return true;
@@ -16,6 +21,10 @@ namespace Studio.Softer.Workspaces
             }
         }
 
+        /// <summary>
+        /// Allowzs to get the all the main menu items.
+        /// </summary>
+        /// <returns></returns>
         public ObservableCollection<MenuItem> GetMainMenuItems()
         {
             return new ObservableCollection<MenuItem>
@@ -27,6 +36,14 @@ namespace Studio.Softer.Workspaces
                 new MenuItem { Header = "Window" },
                 new MenuItem { Header = "Aide" },
             };
+        }
+
+        /// <summary>
+        /// Represents the icon of this workspace
+        /// </summary>
+        public override ImageSource WorkspaceIcon()
+        {
+            return ResourcesManager.AddImageSource("resources/color-cirlce.png");
         }
     }
 }

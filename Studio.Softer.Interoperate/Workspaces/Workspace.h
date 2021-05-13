@@ -2,6 +2,7 @@
 
 using namespace System;
 using namespace System::Windows::Input;
+using namespace System::Windows::Media;
 
 namespace Studio
 {
@@ -15,6 +16,7 @@ namespace Studio
 				{
 				public:
 					event EventHandler^ WorkspaceEvent;
+					virtual ImageSource^ WorkspaceIcon() abstract;
 				};
 			}
 		}

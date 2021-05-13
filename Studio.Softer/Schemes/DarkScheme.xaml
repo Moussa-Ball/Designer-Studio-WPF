@@ -3,16 +3,17 @@
                     xmlns:System="clr-namespace:System;assembly=mscorlib"
                     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib"
                     mc:Ignorable="options">
 
-    
     <!--#region WINDOWS -->
-    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.Background" Color="#252525" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.Background" Color="#202020" options:Freeze="True"/>
     <!--#endregion WINDOWS -->
 
     
     <!--#region TITLE BAR -->
     <SolidColorBrush x:Key="Studio.Softer.UI.WindowTitleBar.Background" Color="#303030" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Studio.Softer.UI.WindowTitleBar.BorderBrush" Color="#242424" options:Freeze="True"/>
     <!--#endregion TITLE BAR -->
 
     
@@ -31,6 +32,14 @@
     <SolidColorBrush x:Key="MenuSeparatorBorderBrush" Color="#333337" options:Freeze="True" />
     <SolidColorBrush x:Key="MenuItemHighlightedBackground" Color="#3E3E40" options:Freeze="True" />
     <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#333334" options:Freeze="True" />
+    <!--#endregion-->
+
+
+    <!--#endregion STATUS BAR -->
+    <system:Double x:Key="Studio.Softer.UI.SofterWindow.StatusBar.FontSize">12</system:Double>
+    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.StatusBar.Foreground" Color="White" options:Freeze="True" />
+    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.StatusBar.Background" Color="#303030" options:Freeze="True" />
+    <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.StatusBar.BorderBrush" Color="#242424" options:Freeze="True"/>
     <!--#endregion-->
 
 </ResourceDictionary>

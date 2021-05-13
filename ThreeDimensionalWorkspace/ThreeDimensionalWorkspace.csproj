@@ -78,6 +78,13 @@
       <Project>{11cd0320-2647-41ae-8218-84967f23c1fa}</Project>
       <Name>Studio.Softer.Interoperate</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Studio.Softer\Studio.Softer.csproj">
+      <Project>{a5b5a64a-2f11-42b8-a6bd-c6bc674123be}</Project>
+      <Name>Studio.Softer</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="resources\color-circle.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

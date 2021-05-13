@@ -26,9 +26,20 @@ namespace Studio.Softer.Services
         }
 
         /// <summary>
-        /// Contains a list of container who will be use in an application.
+        /// Contains a list of workspace who will be use in an application.
         /// </summary>
-        public WorkspaceContainer WorkspaceContainer { get; private set; }
+        public WorkspaceContainer workspaceContainer { get; private set; }
+        public WorkspaceContainer WorkspaceContainer { 
+            get 
+            { 
+                return workspaceContainer; 
+            } 
+            private set 
+            {
+                workspaceContainer = value;
+                OnPropertyChanged("WorkspaceContainer");
+            } 
+        }
 
         #endregion
 
@@ -41,14 +52,25 @@ namespace Studio.Softer.Services
         }
 
         /// <summary>
+        /// Allows to get the active workspace.
+        /// </summary>
+        private void GetActiveWorkspace()
+        {
+            foreach (var workspace in WorkspaceContainer)
+            {
+                if((bool)workspace.GetType().GetProperty("Active").GetValue(workspace, null))
+                {
+                    MenuItems = (ObservableCollection<MenuItem>)workspace.GetType().GetMethod("GetMainMenuItems").Invoke(workspace, null);
+                }
+            }
+        }
+
+        /// <summary>
         /// Load All workspaces.
         /// </summary>
         public void StartupAllWorkspaces()
         {
-            foreach (var workspace in WorkspaceContainer)
-            {
-                MenuItems = (ObservableCollection<MenuItem>)workspace.GetType().GetMethod("GetMainMenuItems").Invoke(workspace, null);
-            }
+            GetActiveWorkspace();
         }
 
         /// <summary>
