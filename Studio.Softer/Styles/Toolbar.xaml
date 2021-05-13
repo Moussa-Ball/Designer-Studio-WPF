@@ -1,0 +1,92 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Overflow Button Style -->
+    <Style x:Key="Studio.Softer.Styles.ToggleButton.ToolBarOverflow" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Margin" Value="6 0 0 0"/>
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Name="Bd" Background="Transparent" SnapsToDevicePixels="true" 
+                            VerticalAlignment="Center" HorizontalAlignment="Right" Padding="4">
+                        <Grid VerticalAlignment="Center" Margin="0 0 0 4">
+                            <!--  Overflow button similar to visual studio  -->
+                            <Rectangle Name="Rectangle"
+                                       Width="6"
+                                       Height="1"
+                                       Margin="2 8"
+                                       VerticalAlignment="Bottom"
+                                       Fill="{DynamicResource Studio.Softer.UI.ToolBar.Foreground}" />
+                            <Path Name="Arrow"
+                                  Margin="2 3"
+                                  VerticalAlignment="Bottom"
+                                  Data="M 0 0 L 6 0 3 3 Z"
+                                  Fill="{DynamicResource Studio.Softer.UI.ToolBar.Foreground}" />
+                            <ContentPresenter />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Rectangle" Property="Fill" Value="{DynamicResource Studio.Softer.UI.ToolBar.Foreground}" />
+                            <Setter TargetName="Arrow" Property="Fill" Value="{DynamicResource Studio.Softer.UI.ToolBar.Foreground.IsMouseOver}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource Studio.Softer.UI.ToolBar.Background.IsMouseOver}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Toolbar Style -->
+    <Style TargetType="{x:Type ToolBar}">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolBar}">
+                    <Border x:Name="Border" Background="{DynamicResource Studio.Softer.UI.ToolBar.Background}"
+                            BorderBrush="{DynamicResource Studio.Softer.UI.ToolBar.BorderBrush}"
+                            Padding="8 0 0 0">
+                        <DockPanel>
+                            <ToggleButton ClickMode="Press"
+                                          DockPanel.Dock="Right"
+                                          x:Name="OverflowButton"
+                                          IsChecked="{Binding Path=IsOverflowOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          IsEnabled="{TemplateBinding HasOverflowItems}"
+                                          Style="{StaticResource Studio.Softer.Styles.ToggleButton.ToolBarOverflow}">
+                                <Popup x:Name="OverflowPopup"
+                                       AllowsTransparency="true"
+                                       Focusable="false"
+                                       IsOpen="{Binding Path=IsOverflowOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Placement="Bottom"
+                                       PopupAnimation="Slide"
+                                       StaysOpen="false">
+                                    <Border x:Name="DropDownBorder"
+                                            Background="{DynamicResource Studio.Softer.UI.ToolBar.Background}"
+                                            BorderBrush="{DynamicResource Studio.Softer.UI.ToolBar.BorderBrush}"
+                                            BorderThickness="1">
+                                        <ToolBarOverflowPanel x:Name="PART_ToolBarOverflowPanel"
+                                                              Margin="2"
+                                                              FocusVisualStyle="{x:Null}"
+                                                              Focusable="true"
+                                                              KeyboardNavigation.DirectionalNavigation="Cycle"
+                                                              KeyboardNavigation.TabNavigation="Cycle"
+                                                              WrapWidth="200" />
+                                    </Border>
+                                </Popup>
+                            </ToggleButton>
+
+                            <ToolBarPanel x:Name="PART_ToolBarPanel" Margin="0 1 2 2"  IsItemsHost="true" />
+                        </DockPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="HasOverflowItems" Value="false">
+                            <Setter TargetName="OverflowButton" Property="Visibility" Value="Hidden" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

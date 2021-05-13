@@ -79,53 +79,13 @@
                             </winui:WindowCommands>
 
                             <!-- TOOLBAR -->
-                            <ToolBar Grid.Row="1">
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Separator/>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                                <Button>BTN</Button>
-                            </ToolBar>
+                            <ToolBar Grid.Row="1" 
+                                     ItemsSource="{Binding ToolBarItems, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <!-- STATUS BAR -->
-                            <StatusBar Grid.Row="3" Padding="0 4 0 4" BorderThickness="0 1 0 0" 
-                                       BorderBrush="{DynamicResource Studio.Softer.UI.SofterWindow.StatusBar.BorderBrush}">
-                                <StatusBarItem>X: 35</StatusBarItem>
-                                <Separator/>
-                                <StatusBarItem>Y: 45</StatusBarItem>
-                            </StatusBar>
+                            <StatusBar ItemsSource="{Binding StatusBarItems, UpdateSourceTrigger=PropertyChanged}"
+                                       Grid.Row="3" Padding="0 4 0 4" BorderThickness="0 1 0 0" 
+                                       BorderBrush="{DynamicResource Studio.Softer.UI.SofterWindow.StatusBar.BorderBrush}"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

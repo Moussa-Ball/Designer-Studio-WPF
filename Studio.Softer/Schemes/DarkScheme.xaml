@@ -34,8 +34,17 @@
     <SolidColorBrush x:Key="SubmenuItemBackgroundHighlighted" Color="#333334" options:Freeze="True" />
     <!--#endregion-->
 
+    
+    <!--#endregion ToolBar -->
+    <SolidColorBrush x:Key="Studio.Softer.UI.ToolBar.Foreground" Color="#ffffff" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Studio.Softer.UI.ToolBar.Background" Color="#303030" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Studio.Softer.UI.ToolBar.BorderBrush" Color="#292929" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Studio.Softer.UI.ToolBar.Foreground.IsMouseOver" Color="#ffffff" options:Freeze="True"/>
+    <SolidColorBrush x:Key="Studio.Softer.UI.ToolBar.Background.IsMouseOver" Color="#3E3E40" options:Freeze="True"/>
+    <!--#endregion-->
 
-    <!--#endregion STATUS BAR -->
+
+    <!--#endregion Status Bar -->
     <system:Double x:Key="Studio.Softer.UI.SofterWindow.StatusBar.FontSize">12</system:Double>
     <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.StatusBar.Foreground" Color="White" options:Freeze="True" />
     <SolidColorBrush x:Key="Studio.Softer.UI.SofterWindow.StatusBar.Background" Color="#303030" options:Freeze="True" />

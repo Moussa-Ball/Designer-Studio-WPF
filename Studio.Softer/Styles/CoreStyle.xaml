@@ -12,6 +12,9 @@
 
         <!--Status Bar-->
         <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/StatusBar.xaml" />
+        
+        <!--ToolBar-->
+        <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/Toolbar.xaml" />
 
         <!--Main Window-->
         <ResourceDictionary Source="pack://application:,,,/Studio.Softer;component/Styles/SofterWindow.xaml" />

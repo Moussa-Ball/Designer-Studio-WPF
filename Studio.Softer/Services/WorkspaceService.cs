@@ -1,6 +1,8 @@
 ﻿using System.Windows.Controls;
 using Studio.Softer.Workspaces;
 using System.Collections.ObjectModel;
+using System.Windows.Controls.Primitives;
+using System.Windows;
 
 namespace Studio.Softer.Services
 {
@@ -28,7 +30,7 @@ namespace Studio.Softer.Services
         /// <summary>
         /// Contains a list of workspace who will be use in an application.
         /// </summary>
-        public WorkspaceContainer workspaceContainer { get; private set; }
+        private WorkspaceContainer workspaceContainer;
         public WorkspaceContainer WorkspaceContainer { 
             get 
             { 
@@ -39,6 +41,40 @@ namespace Studio.Softer.Services
                 workspaceContainer = value;
                 OnPropertyChanged("WorkspaceContainer");
             } 
+        }
+
+        /// <summary>
+        /// Contains the list of items for toolbar items.
+        /// </summary>
+        public ObservableCollection<UIElement> toolBarItems;
+        public ObservableCollection<UIElement> ToolBarItems
+        {
+            get
+            {
+                return toolBarItems;
+            }
+            private set
+            {
+                toolBarItems = value;
+                OnPropertyChanged("ToolBarItems");
+            }
+        }
+
+        /// <summary>
+        /// Contains the list of items for statusbar.
+        /// </summary>
+        public ObservableCollection<StatusBarItem> statusBarItems;
+        public ObservableCollection<StatusBarItem> StatusBarItems
+        {
+            get
+            {
+                return statusBarItems;
+            }
+            private set
+            {
+                statusBarItems = value;
+                OnPropertyChanged("StatusBarItems");
+            }
         }
 
         #endregion
