@@ -1,5 +1,5 @@
 # Designer Studio
-Professional Cinematic 3D Advertising Software
+Modeling, computer animation and 3D rendering software.
 
 ## License
 
