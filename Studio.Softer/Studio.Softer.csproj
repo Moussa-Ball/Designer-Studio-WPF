@@ -76,11 +76,13 @@
     <Compile Include="Schemes\SchemeEnum.cs" />
     <Compile Include="Schemes\SchemeManager.cs" />
     <Compile Include="Schemes\SchemeManagerEventArgs.cs" />
+    <Compile Include="Services\DockManagerService.cs" />
     <Compile Include="Services\SchemeService.cs" />
     <Compile Include="Services\WindowService.cs" />
     <Compile Include="Services\WorkspaceService.cs" />
     <Compile Include="Settings\SchemeSettings.cs" />
     <Compile Include="Settings\WindowSettings.cs" />
+    <Compile Include="UI\FloatingWindow.cs" />
     <Compile Include="UI\SofterWindow.cs" />
     <Compile Include="UI\SplashScreen.xaml.cs">
       <DependentUpon>SplashScreen.xaml</DependentUpon>
@@ -128,6 +130,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\CoreStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\StudioCore.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

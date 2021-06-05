@@ -64,7 +64,9 @@ namespace Studio.Softer
         /// <param name="e"></param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            Logger.Info("The application starts up.");
             ResourcesManager.AddDictionnaryResource("Styles/CoreStyle.xaml");
+            ResourcesManager.AddDictionnaryResource("Styles/StudioCore.xaml");
             base.OnStartup(e);
         }
 
@@ -84,6 +86,7 @@ namespace Studio.Softer
             services.Publish(new SchemeService());
             services.Publish(new WorkspaceService());
             services.Publish(new WindowService(services));
+            services.Publish(new DockManagerService(services));
         }
 
         /// <summary>

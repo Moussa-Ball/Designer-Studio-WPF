@@ -23,7 +23,7 @@ namespace Studio.Softer.Services
             private set
             {
                 menuItems = value;
-                OnPropertyChanged("MenuItems");
+                OnPropertyChanged(nameof(MenuItems));
             }
         }
 
@@ -39,7 +39,7 @@ namespace Studio.Softer.Services
             private set 
             {
                 workspaceContainer = value;
-                OnPropertyChanged("WorkspaceContainer");
+                OnPropertyChanged(nameof(WorkspaceContainer));
             } 
         }
 
@@ -56,7 +56,7 @@ namespace Studio.Softer.Services
             private set
             {
                 toolBarItems = value;
-                OnPropertyChanged("ToolBarItems");
+                OnPropertyChanged(nameof(ToolBarItems));
             }
         }
 
@@ -73,7 +73,7 @@ namespace Studio.Softer.Services
             private set
             {
                 statusBarItems = value;
-                OnPropertyChanged("StatusBarItems");
+                OnPropertyChanged(nameof(StatusBarItems));
             }
         }
 

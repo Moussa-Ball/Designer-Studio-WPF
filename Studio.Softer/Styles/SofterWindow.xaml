@@ -5,18 +5,6 @@
                     xmlns:win="clr-namespace:Studio.Softer.Windows;assembly=Studio.Softer.Windows"
                     xmlns:winui="clr-namespace:Studio.Softer.Windows.UI;assembly=Studio.Softer.Windows">
 
-    <DataTemplate DataType="{x:Type workspaces:WorkspaceService}">
-        <ListBox ItemsSource="{Binding}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <WrapPanel>
-                        <TextBlock Text="{Binding Path=Port}" />
-                    </WrapPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </DataTemplate>
-
     <Style TargetType="{x:Type ui:SofterWindow}">
         <Setter Property="win:WindowChrome.WindowChrome">
             <Setter.Value>
@@ -81,6 +69,8 @@
                             <!-- TOOLBAR -->
                             <ToolBar Grid.Row="1" 
                                      ItemsSource="{Binding ToolBarItems, UpdateSourceTrigger=PropertyChanged}"/>
+
+                            <ContentPresenter x:Name="PART_DockingHost" Grid.Row="2"/>
 
                             <!-- STATUS BAR -->
                             <StatusBar ItemsSource="{Binding StatusBarItems, UpdateSourceTrigger=PropertyChanged}"
