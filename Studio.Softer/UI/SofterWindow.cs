@@ -17,7 +17,7 @@ namespace Studio.Softer.UI
         /// </summary>
         static SofterWindow()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(SofterWindow), 
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(SofterWindow),
                 new FrameworkPropertyMetadata(typeof(SofterWindow)));
         }
 
@@ -34,9 +34,12 @@ namespace Studio.Softer.UI
         /// </summary>
         public override void OnApplyTemplate()
         {
-            Application.Current.GetService<DockManagerService>()
-                .GetDockContainerElement(GetTemplateChild(PART_DockingHost) as ContentPresenter);
+            var contentControl = GetTemplateChild(PART_DockingHost) as ContentPresenter;
+            contentControl.Content = new Interoperate.Controls.RenderControl();
+            /*Application.Current.GetService<DockManagerService>()
+                .GetDockContainerElement(GetTemplateChild(PART_DockingHost) as ContentPresenter);*/
             base.OnApplyTemplate();
         }
+
     }
 }
