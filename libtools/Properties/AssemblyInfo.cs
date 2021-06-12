@@ -8,12 +8,12 @@ using System.Windows.Markup;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Dragablz")]
-[assembly: AssemblyDescription("Dragable tabable")]
+[assembly: AssemblyTitle("libtools")]
+[assembly: AssemblyDescription("libtools")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Mulholland Software Ltd/James Willock")]
-[assembly: AssemblyProduct("Dragablz")]
-[assembly: AssemblyCopyright("Copyright © 2019")]
+[assembly: AssemblyCompany("StudioSofter")]
+[assembly: AssemblyProduct("libtools")]
+[assembly: AssemblyCopyright("Copyright © 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: XmlnsPrefix("http://dragablz.net/winfx/xaml/dragablz", "dragablz")]

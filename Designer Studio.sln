@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Studio.Softer.Interoperate"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Studio.Softer.Graphics", "Studio.Softer.Graphics\Studio.Softer.Graphics.vcxproj", "{8853B642-1222-4053-AFE9-6EF2C3D9E8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dragablz", "Dragablz\Dragablz.csproj", "{90C99C57-C42B-401C-941F-5AF9B403589E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libtools", "libtools\libtools.csproj", "{90C99C57-C42B-401C-941F-5AF9B403589E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,6 +76,7 @@ Global
 		{90C99C57-C42B-401C-941F-5AF9B403589E}.Debug|x64.Build.0 = Debug|x64
 		{90C99C57-C42B-401C-941F-5AF9B403589E}.Debug|x86.ActiveCfg = Debug|x64
 		{90C99C57-C42B-401C-941F-5AF9B403589E}.Release|x64.ActiveCfg = Release|x64
+		{90C99C57-C42B-401C-941F-5AF9B403589E}.Release|x64.Build.0 = Release|x64
 		{90C99C57-C42B-401C-941F-5AF9B403589E}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution

@@ -111,9 +111,9 @@
     <Resource Include="Resources\fonts\GothamRoundedMedium_21022.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dragablz\Dragablz.csproj">
+    <ProjectReference Include="..\Dragablz\libtools.csproj">
       <Project>{90c99c57-c42b-401c-941f-5af9b403589e}</Project>
-      <Name>Dragablz</Name>
+      <Name>libtools</Name>
     </ProjectReference>
     <ProjectReference Include="..\Studio.Softer.Interoperate\Studio.Softer.Interoperate.vcxproj">
       <Project>{11cd0320-2647-41ae-8218-84967f23c1fa}</Project>
