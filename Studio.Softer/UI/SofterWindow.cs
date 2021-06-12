@@ -34,10 +34,8 @@ namespace Studio.Softer.UI
         /// </summary>
         public override void OnApplyTemplate()
         {
-            var contentControl = GetTemplateChild(PART_DockingHost) as ContentPresenter;
-            contentControl.Content = new Interoperate.Controls.RenderControl();
-            /*Application.Current.GetService<DockManagerService>()
-                .GetDockContainerElement(GetTemplateChild(PART_DockingHost) as ContentPresenter);*/
+            Application.Current.GetService<DockManagerService>()
+                .GetDockContainerElement(GetTemplateChild(PART_DockingHost) as ContentPresenter);
             base.OnApplyTemplate();
         }
 

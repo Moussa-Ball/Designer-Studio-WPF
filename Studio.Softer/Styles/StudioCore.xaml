@@ -13,7 +13,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Grid x:Name="PART_LeftDock" Grid.Row="0"/>
-                        <Grid x:Name="PART_Viewport" Grid.Row="1"/>
+                        <Grid x:Name="PART_Document" Grid.Row="1"/>
                         <Grid x:Name="PART_RightDock" Grid.Row="2"/>
                     </Grid>
                 </ControlTemplate>
