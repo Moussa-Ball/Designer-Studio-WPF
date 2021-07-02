@@ -1,7 +1,6 @@
 #include "OpenGLContext.h"
 
 #include <iostream>
-
 #include <GL/glew.h>
 
 HDC deviceContext = NULL;
@@ -17,37 +16,28 @@ namespace Studio
 			{
                 void OpenGLContext::MakeOpenGLContext(HWND window)
                 {
-                    static  PIXELFORMATDESCRIPTOR pfd =             // pfd Tells Windows How We Want Things To Be
-                    {
-                        sizeof(PIXELFORMATDESCRIPTOR),              // Size Of This Pixel Format Descriptor
-                        1,                                          // Version Number
-                        PFD_DRAW_TO_WINDOW |                        // Format Must Support Window
-                        PFD_SUPPORT_OPENGL |                        // Format Must Support OpenGL
-                        PFD_DOUBLEBUFFER,                           // Must Support Double Buffering
-                        PFD_TYPE_RGBA,                              // Request An RGBA Format
-                        3,                                          // Select Our Color Depth
-                        0, 0, 0, 0, 0, 0,                           // Color Bits Ignored
-                        0,                                          // No Alpha Buffer
-                        0,                                          // Shift Bit Ignored
-                        0,                                          // No Accumulation Buffer
-                        0, 0, 0, 0,                                 // Accumulation Bits Ignored
-                        24,                                         // 16Bit Z-Buffer (Depth Buffer)  
-                        0,                                          // No Stencil Buffer
-                        0,                                          // No Auxiliary Buffer
-                        PFD_MAIN_PLANE,                             // Main Drawing Layer
-                        0,                                          // Reserved
-                        0, 0, 0                                     // Layer Masks Ignored
-                    };
-
                     deviceContext = GetDC(window);
 
-                    int pixelFormat;
-                    pixelFormat = ChoosePixelFormat(deviceContext, &pfd);
-                    SetPixelFormat(deviceContext, pixelFormat, &pfd);
+                    PIXELFORMATDESCRIPTOR DesiredPixelFormat = {};
+                    DesiredPixelFormat.nSize = sizeof(DesiredPixelFormat);
+                    DesiredPixelFormat.nVersion = 1;
+                    DesiredPixelFormat.iPixelType = PFD_TYPE_RGBA;
+                    DesiredPixelFormat.dwFlags = PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW | PFD_DOUBLEBUFFER;
+                    DesiredPixelFormat.cColorBits = 32;
+                    DesiredPixelFormat.cAlphaBits = 8;
+                    DesiredPixelFormat.iLayerType = PFD_MAIN_PLANE;
+                    DesiredPixelFormat.cDepthBits = 24;
+                    DesiredPixelFormat.cStencilBits = 8;
+
+                    int SuggestedPixelFormatIndex = ChoosePixelFormat(deviceContext, &DesiredPixelFormat);
+                    PIXELFORMATDESCRIPTOR SuggestedPixelFormat;
+                    DescribePixelFormat(deviceContext, SuggestedPixelFormatIndex, 
+                        sizeof(SuggestedPixelFormat), &SuggestedPixelFormat);
+                    SetPixelFormat(deviceContext, SuggestedPixelFormatIndex, &SuggestedPixelFormat);
                     
                     renderingContext = wglCreateContext(deviceContext);
-                    wglMakeCurrent(deviceContext, renderingContext);
-
+                    if (!wglMakeCurrent(deviceContext, renderingContext))
+                        ReleaseDC(window, deviceContext);
 
                     // Initialize GLEW
                     if (glewInit() != GLEW_OK) {

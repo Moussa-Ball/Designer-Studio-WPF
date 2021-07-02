@@ -30,7 +30,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
-                            
+
                             <!-- TITLE BAR -->
                             <winui:WindowCommands Grid.Row="0"
                                                   Background="{DynamicResource Studio.Softer.UI.WindowTitleBar.Background}"

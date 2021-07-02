@@ -13,6 +13,7 @@ using namespace System::Windows;
 using namespace System::Windows::Input;
 using namespace System::Windows::Media;
 using namespace System::Windows::Interop;
+using namespace System::Windows::Controls;
 using namespace System::Runtime::InteropServices;
 
 namespace Studio
@@ -29,7 +30,7 @@ namespace Studio
 					/*
 					* \brief Default Constructor.
 					*/
-					RenderControl();
+					RenderControl(ContentPresenter^ container);
 
 				protected:
 					virtual IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, bool% handled) override;
@@ -37,13 +38,14 @@ namespace Studio
 					virtual void DestroyWindowCore(HandleRef hwnd) override;
 					
 				private:
-					HWND parent;
-					HWND window;
-
 					int m_width;
 					int m_height;
 
-					Graphics::OpenGL::OpenGLContext* context;
+					HWND parent = nullptr;
+					HWND window = nullptr;
+					
+					Graphics::OpenGL::OpenGLContext* context = nullptr;
+					System::Windows::Controls::ContentPresenter^ container = nullptr;
 				};
 			}
 		}

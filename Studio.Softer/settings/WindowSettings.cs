@@ -9,25 +9,21 @@ namespace Studio.Softer.Settings
         /// <summary>
         /// The width of Main Window.
         /// </summary>
-        [DefaultValue(1024)]
         public double Width { get; set; }
 
         /// <summary>
         /// The height of Main Window.
         /// </summary>
-        [DefaultValue(768)]
         public double Height { get; set; }
 
         /// <summary>
         /// The top position of Main Window.
         /// </summary>
-        [DefaultValue(100)]
         public double Top { get; set; }
 
         /// <summary>
         /// The left position of Main Window.
         /// </summary>
-        [DefaultValue(100)]
         public double Left { get; set; }
 
         /// <summary>

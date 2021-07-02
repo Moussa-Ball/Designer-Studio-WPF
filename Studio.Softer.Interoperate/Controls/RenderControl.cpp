@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "../pch.h"
 #include "RenderControl.h"
 
 namespace Studio
@@ -9,7 +9,11 @@ namespace Studio
 		{
 			namespace Controls
 			{
-				RenderControl::RenderControl() : window(nullptr) {}
+				RenderControl::RenderControl(ContentPresenter^ container) :
+					window(nullptr), context(nullptr)
+				{
+					this->container = container;
+				}
 
 				IntPtr RenderControl::WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, bool% handled)
 				{
@@ -17,21 +21,17 @@ namespace Studio
 					{
 					case WM_PAINT:
 						PAINTSTRUCT ps;
-						context->OnRender();
 						BeginPaint(reinterpret_cast<HWND>(hwnd.ToPointer()), &ps);
+						context->OnRender();
 						EndPaint(reinterpret_cast<HWND>(hwnd.ToPointer()), &ps);
 						handled = true;
 						return System::IntPtr::Zero;
+						break;
 					case WM_SIZE:
-						RECT rect;
-						if (GetWindowRect(parent, &rect))
-						{
-							m_width = rect.right - rect.left;
-							m_height = rect.bottom - rect.top;
-						}
-						context->glewViewport(0, 0, m_width, m_height);
-						handled = false;
+						context->glewViewport(0, 0, (int)this->container->ActualWidth, (int)this->container->ActualHeight);
+						handled = true;
 						return System::IntPtr::Zero;
+						break;
 					}
 					handled = false;
 					return System::IntPtr::Zero;
@@ -39,27 +39,19 @@ namespace Studio
 
 				HandleRef RenderControl::BuildWindowCore(HandleRef hwndParent)
 				{
-					parent = reinterpret_cast<HWND>(hwndParent.Handle.ToPointer());
-
-					RECT rect;
-					if (GetWindowRect(parent, &rect))
-					{
-						m_width = rect.right - rect.left;
-						m_height = rect.bottom - rect.top;
-					}
-
+					this->parent = reinterpret_cast<HWND>(hwndParent.Handle.ToPointer());
 					this->window = CreateWindowEx(
 						0, 
 						L"static", 
 						NULL,
 						WS_CHILD | WS_VISIBLE,
 						0, 0,
-						m_width,
-						m_height,
+						(int)this->container->ActualWidth,
+						(int)this->container->ActualHeight,
 						parent,
 						NULL,
-						NULL,
-						0
+						(HINSTANCE)GetModuleHandle(NULL),
+						NULL
 					);
 
 					// Make an opengl context for a win32 window and initlize glew.

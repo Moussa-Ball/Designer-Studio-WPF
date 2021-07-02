@@ -8,11 +8,11 @@ using System.Windows.Markup;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("libtools")]
-[assembly: AssemblyDescription("libtools")]
+[assembly: AssemblyTitle("libstudio")]
+[assembly: AssemblyDescription("libstudio")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("StudioSofter")]
-[assembly: AssemblyProduct("libtools")]
+[assembly: AssemblyProduct("libstudio")]
 [assembly: AssemblyCopyright("Copyright © 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -62,3 +62,4 @@ using System.Windows.Markup;
 [assembly: AssemblyFileVersion("0.0.4.0")]
 
 [assembly: InternalsVisibleTo("Dragablz.Test")]
+[assembly: NeutralResourcesLanguage("en-029")]

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30320.27
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31410.414
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studio.Softer.Windows", "Studio.Softer.Windows\Studio.Softer.Windows.csproj", "{563AA3B9-8D24-47FB-96BF-9852F97E8306}"
 EndProject
@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Studio.Softer.Interoperate"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Studio.Softer.Graphics", "Studio.Softer.Graphics\Studio.Softer.Graphics.vcxproj", "{8853B642-1222-4053-AFE9-6EF2C3D9E8CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libtools", "libtools\libtools.csproj", "{90C99C57-C42B-401C-941F-5AF9B403589E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "libstudio", "libtools\libstudio.csproj", "{90C99C57-C42B-401C-941F-5AF9B403589E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

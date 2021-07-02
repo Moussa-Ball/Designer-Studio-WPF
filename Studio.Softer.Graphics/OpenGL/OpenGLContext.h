@@ -18,13 +18,13 @@ namespace Studio
 				{
 				public:
 					void MakeOpenGLContext(HWND window);
-					HGLRC gerRenderingContext();
-					HDC getDeviceContext();
-
-					void glewViewport(int x, int y, int width, int height);
-					
 					void DestroyOpenGLContext(HWND window);
+
+					HDC getDeviceContext();
+					HGLRC gerRenderingContext();
+
 					void OnRender();
+					void glewViewport(int x, int y, int width, int height);
 				};
 			}
 		}

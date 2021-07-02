@@ -59,11 +59,11 @@ namespace Studio.Softer.Services
         private void LoadWindowSettings()
         {
             Settings.LoadSettings();
+            MainWindow.Top = Settings.Top;
+            MainWindow.Left = Settings.Left;
             MainWindow.Width = Settings.Width;
             MainWindow.Height = Settings.Height;
             MainWindow.WindowState = Settings.WindowState;
-            MainWindow.Top = (Settings.Top > 0) ? Settings.Top : 100;
-            MainWindow.Left = (Settings.Left > 0) ? Settings.Top : 100;
         }
 
         /// <summary>
@@ -73,20 +73,22 @@ namespace Studio.Softer.Services
         /// <param name="e"></param>
         private void SaveWindowSettings(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (MainWindow.WindowState == System.Windows.WindowState.Maximized)
-            {
-                Settings.Top = MainWindow.RestoreBounds.Top;
-                Settings.Left = MainWindow.RestoreBounds.Left;
-                Settings.Width = MainWindow.RestoreBounds.Width;
-                Settings.Height = MainWindow.RestoreBounds.Height;
-            } else
+            if (MainWindow.WindowState == System.Windows.WindowState.Normal)
             {
                 Settings.Top = MainWindow.Top;
                 Settings.Left = MainWindow.Left;
                 Settings.Width = MainWindow.Width;
                 Settings.Height = MainWindow.Height;
+                Settings.WindowState = MainWindow.WindowState;
+            } 
+            else
+            {
+                Settings.Top = MainWindow.RestoreBounds.Top;
+                Settings.Left = MainWindow.RestoreBounds.Left;
+                Settings.WindowState = MainWindow.WindowState;
+                Settings.Width = MainWindow.RestoreBounds.Width;
+                Settings.Height = MainWindow.RestoreBounds.Height;
             }
-            Settings.WindowState = MainWindow.WindowState;
             Settings.Save();
 
             // Saves all settings we need.

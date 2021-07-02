@@ -1,5 +1,9 @@
-#include "pch.h"
 #include "Logging.h"
+
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <string>
 
 #include "spdlog/spdlog.h"
 #include "spdlog/sinks/basic_file_sink.h"

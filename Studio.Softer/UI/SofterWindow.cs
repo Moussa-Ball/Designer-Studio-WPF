@@ -38,6 +38,5 @@ namespace Studio.Softer.UI
                 .GetDockContainerElement(GetTemplateChild(PART_DockingHost) as ContentPresenter);
             base.OnApplyTemplate();
         }
-
     }
 }
