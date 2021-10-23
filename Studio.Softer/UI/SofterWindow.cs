@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using Studio.Softer.Services;
 using System.Windows.Controls;
+using System.Windows.Interop;
+using System;
 
 namespace Studio.Softer.UI
 {
@@ -34,8 +36,11 @@ namespace Studio.Softer.UI
         /// </summary>
         public override void OnApplyTemplate()
         {
-            Application.Current.GetService<DockManagerService>()
-                .GetDockContainerElement(GetTemplateChild(PART_DockingHost) as ContentPresenter);
+            var scene = GetTemplateChild(PART_DockingHost) as ContentPresenter;
+            var window = new WindowInteropHelper(new UI.SplashScreen());
+            scene.Content = new HwndHostEx(window.Handle);
+            /*Application.Current.GetService<DockManagerService>()
+                .GetDockContainerElement(GetTemplateChild(PART_DockingHost) as ContentPresenter);*/
             base.OnApplyTemplate();
         }
     }

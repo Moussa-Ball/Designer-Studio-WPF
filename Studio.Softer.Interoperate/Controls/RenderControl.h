@@ -30,7 +30,7 @@ namespace Studio
 					/*
 					* \brief Default Constructor.
 					*/
-					RenderControl(ContentPresenter^ container);
+					RenderControl();
 
 				protected:
 					virtual IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, bool% handled) override;
@@ -45,7 +45,6 @@ namespace Studio
 					HWND window = nullptr;
 					
 					Graphics::OpenGL::OpenGLContext* context = nullptr;
-					System::Windows::Controls::ContentPresenter^ container = nullptr;
 				};
 			}
 		}

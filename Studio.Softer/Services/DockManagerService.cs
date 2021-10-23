@@ -1,6 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using Studio.Softer.UI;
+using System.Windows.Controls;
 using System.Activities.Presentation;
-using Studio.Softer.Windows.UI.MDI;
 
 namespace Studio.Softer.Services
 {
@@ -36,20 +36,6 @@ namespace Studio.Softer.Services
             }
         }
 
-        private DocumentManagerSelector documentManagerSelector;
-        public DocumentManagerSelector DocumentManagerSelector
-        {
-            get
-            {
-                return documentManagerSelector;
-            }
-            set
-            {
-                documentManagerSelector = value;
-                OnPropertyChanged(nameof(DocumentManagerSelector));
-            }
-        }
-
         #endregion
 
 
@@ -62,7 +48,10 @@ namespace Studio.Softer.Services
         public void GetDockContainerElement(ContentPresenter content)
         {
             DockManagerContainer = content;
-            DockManagerContainer.Content = DocumentManagerSelector = new DocumentManagerSelector();
+            DockManager dockManager = new DockManager();
+            dockManager.SetContainer(DockManagerContainer);
+            dockManager.AddDockSide(DockSide.Left);
+            dockManager.AddDockSide(DockSide.Left);
         }
     }
 }

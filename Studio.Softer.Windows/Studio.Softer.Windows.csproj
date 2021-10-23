@@ -85,7 +85,6 @@
     <Compile Include="SystemCommands.cs" />
     <Compile Include="SystemParameters2.cs" />
     <Compile Include="UI\ClosingWindowEventHandlerArgs.cs" />
-    <Compile Include="UI\MDI\DocumentManagerSelector.cs" />
     <Compile Include="UI\SimpleWindow.cs" />
     <Compile Include="UI\TreeHelper.cs" />
     <Compile Include="UI\WindowButtonCommands.cs" />

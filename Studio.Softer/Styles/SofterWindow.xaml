@@ -1,8 +1,10 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="clr-namespace:Studio.Softer.UI"
+                    xmlns:dragablz="clr-namespace:Dragablz;assembly=libtools"
                     xmlns:win="clr-namespace:Studio.Softer.Windows;assembly=Studio.Softer.Windows"
-                    xmlns:winui="clr-namespace:Studio.Softer.Windows.UI;assembly=Studio.Softer.Windows">
+                    xmlns:winui="clr-namespace:Studio.Softer.Windows.UI;assembly=Studio.Softer.Windows"
+                    xmlns:interop_controls="clr-namespace:Studio.Softer.Interoperate.Controls;assembly=Studio.Softer.Interoperate">
 
     <Style TargetType="{x:Type ui:SofterWindow}">
         <Setter Property="win:WindowChrome.WindowChrome">
@@ -67,11 +69,14 @@
                             </winui:WindowCommands>
 
                             <!-- TOOLBAR -->
-                            <ToolBar Grid.Row="1" 
-                                     ItemsSource="{Binding ToolBarItems, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Border Grid.Row="1" 
+                                    BorderThickness="0 0 0 1" 
+                                    BorderBrush="{DynamicResource Studio.Softer.UI.WindowTitleBar.BorderBrush}">
+                                <ToolBar ItemsSource="{Binding ToolBarItems, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Border>
 
                             <!-- WINDOW CONTENT -->
-                            <ContentPresenter x:Name="PART_DockingHost" Grid.Row="2"/>
+                            <ContentPresenter Grid.Row="2" x:Name="PART_DockingHost" />
 
                             <!-- STATUS BAR -->
                             <StatusBar ItemsSource="{Binding StatusBarItems, UpdateSourceTrigger=PropertyChanged}"

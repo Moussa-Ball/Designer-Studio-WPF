@@ -9,11 +9,7 @@ namespace Studio
 		{
 			namespace Controls
 			{
-				RenderControl::RenderControl(ContentPresenter^ container) :
-					window(nullptr), context(nullptr)
-				{
-					this->container = container;
-				}
+				RenderControl::RenderControl() : window(nullptr), context(nullptr) {}
 
 				IntPtr RenderControl::WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, bool% handled)
 				{
@@ -28,7 +24,7 @@ namespace Studio
 						return System::IntPtr::Zero;
 						break;
 					case WM_SIZE:
-						context->glewViewport(0, 0, (int)this->container->ActualWidth, (int)this->container->ActualHeight);
+						context->glewViewport(0, 0, (int)this->ActualWidth, (int)this->ActualHeight);
 						handled = true;
 						return System::IntPtr::Zero;
 						break;
@@ -46,8 +42,8 @@ namespace Studio
 						NULL,
 						WS_CHILD | WS_VISIBLE,
 						0, 0,
-						(int)this->container->ActualWidth,
-						(int)this->container->ActualHeight,
+						(int)this->ActualWidth,
+						(int)this->ActualHeight,
 						parent,
 						NULL,
 						(HINSTANCE)GetModuleHandle(NULL),

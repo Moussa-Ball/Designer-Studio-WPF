@@ -66,7 +66,6 @@ namespace Studio.Softer
         {
             Logger.Info("The application starts up.");
             ResourcesManager.AddDictionnaryResource("Styles/CoreStyle.xaml");
-            ResourcesManager.AddDictionnaryResource("Styles/StudioCore.xaml");
             base.OnStartup(e);
         }
 
